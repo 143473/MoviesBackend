@@ -1,0 +1,90 @@
+swagger: "2.0"
+info:
+  description: "Service responsible to handle all the calls related to movies."
+  version: "1.0.0"
+  title: Tmdb
+host: "api.themoviedb.org"
+basePath: "/3"
+tags:
+  - name: MoviesDb
+    description: Everything that goes with the movies
+
+produces:
+  - "application/json"
+schemes:
+  - "https"
+
+paths:
+  '/movie/{movie_id}/lists':
+    get:
+      tags:
+        - movies
+      operationId: GetListOfMovies
+      description: Get list of movies
+      summary: Get list of movies
+      parameters:
+        - name: movie_id
+          in: path
+          required: true
+          description: ID of the movie
+          type: integer
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: language
+          in: query
+          type: string
+          description: Pass a ISO 639-1 value to display translated data for the fields that support it.
+        - name: page
+          in: query
+          type: integer
+          description: Specify which page to query.
+      responses:
+        200:
+          description: Returns list of movies
+          schema:
+            $ref: "#/definitions/MoviesListResponse"
+        401:
+          description: Unauthorized
+        404:
+          description: Movies not found
+
+definitions:
+  MoviesListResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: ID of the movie?
+      page:
+        type: integer
+      results:
+        type: array
+        items:
+          $ref: "#/definitions/Result"
+      total_pages:
+        type: integer
+      total_results:
+        type: integer
+  
+  Result:
+    type: object
+    properties:
+      id:
+        type: integer
+      description:
+        type: string
+      favorite_count:
+        type: integer
+      item_count:
+        type: integer
+      iso_639_1:
+        type: string
+      list_type:
+        type: string
+      name:
+        type: string
+      poster_path:
+        type: string

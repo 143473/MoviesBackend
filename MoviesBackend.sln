@@ -7,6 +7,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{2E40C6
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tmdb", "Tmdb\Tmdb.csproj", "{C39EEABC-6A31-46E8-83D2-AB045AF12E04}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalApi", "ExternalApi", "{A384DF0E-51EC-4B9E-A3D8-1014DA1C3BDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesApi.Swagger", "MoviesApi.Swagger\MoviesApi.Swagger.csproj", "{2FC5454F-06AB-4782-A0E4-6DE8C5988E9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesApi.Data", "MoviesApi.Data\MoviesApi.Data.csproj", "{1EF37FAD-0F86-4CC6-96CD-4269D3D77C41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesApi.Data.Models", "MoviesApi.Data.Models\MoviesApi.Data.Models.csproj", "{E5108ED6-DEA5-4140-95E8-334932C45715}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesApi.Data.Repositories", "MoviesApi.Data.Repositories\MoviesApi.Data.Repositories.csproj", "{5913B035-E341-4B1A-9B5D-0EDAF9782B32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesApi.Services", "MoviesApi.Services\MoviesApi.Services.csproj", "{725353BC-26AA-4C2B-B54B-A996078E4F9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,5 +31,32 @@ Global
 		{DD37EE72-462B-4DD0-8CC7-459D3CAD0C34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD37EE72-462B-4DD0-8CC7-459D3CAD0C34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD37EE72-462B-4DD0-8CC7-459D3CAD0C34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C39EEABC-6A31-46E8-83D2-AB045AF12E04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C39EEABC-6A31-46E8-83D2-AB045AF12E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C39EEABC-6A31-46E8-83D2-AB045AF12E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C39EEABC-6A31-46E8-83D2-AB045AF12E04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FC5454F-06AB-4782-A0E4-6DE8C5988E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FC5454F-06AB-4782-A0E4-6DE8C5988E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FC5454F-06AB-4782-A0E4-6DE8C5988E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FC5454F-06AB-4782-A0E4-6DE8C5988E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EF37FAD-0F86-4CC6-96CD-4269D3D77C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EF37FAD-0F86-4CC6-96CD-4269D3D77C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EF37FAD-0F86-4CC6-96CD-4269D3D77C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EF37FAD-0F86-4CC6-96CD-4269D3D77C41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5108ED6-DEA5-4140-95E8-334932C45715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5108ED6-DEA5-4140-95E8-334932C45715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5108ED6-DEA5-4140-95E8-334932C45715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5108ED6-DEA5-4140-95E8-334932C45715}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5913B035-E341-4B1A-9B5D-0EDAF9782B32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5913B035-E341-4B1A-9B5D-0EDAF9782B32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5913B035-E341-4B1A-9B5D-0EDAF9782B32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5913B035-E341-4B1A-9B5D-0EDAF9782B32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{725353BC-26AA-4C2B-B54B-A996078E4F9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{725353BC-26AA-4C2B-B54B-A996078E4F9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{725353BC-26AA-4C2B-B54B-A996078E4F9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{725353BC-26AA-4C2B-B54B-A996078E4F9A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C39EEABC-6A31-46E8-83D2-AB045AF12E04} = {A384DF0E-51EC-4B9E-A3D8-1014DA1C3BDF}
 	EndGlobalSection
 EndGlobal

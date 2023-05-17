@@ -1,0 +1,134 @@
+swagger: "2.0"
+info:
+  description: "Service responsible to handle all the calls related to movies."
+  version: "1.0.0"
+  title: MoviesDbAPI
+host: "localhost:7012"
+basePath: "/"
+tags:
+  - name: MoviesDb
+    description: Everything that goes with the movies
+
+produces:
+  - "application/json"
+schemes:
+  - "https"
+
+paths:
+  '/register':
+    post:
+      tags:
+        - users
+      operationId: RegisterUser
+      parameters:
+        - name: registerRequest
+          in: body
+          schema: 
+            $ref: "#/definitions/RegisterRequest"
+          required: true
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+  '/comment':
+    post:
+      tags:
+        - comments
+      operationId: AddComment
+      parameters:
+        - name: commentRequest
+          in: body
+          schema:
+            $ref: "#/definitions/CommentRequest"
+          required: true
+      responses: 
+        201:
+          description: Yeeeey!!
+        400:
+          description: Bad Request
+  
+  '/movie/{movie_id}/lists':
+    get:
+      tags:
+        - movies
+      operationId: GetListOfMovies
+      description: Get list of movies
+      summary: Get list of movies
+      parameters:
+        - name: movie_id
+          in: path
+          required: true
+          description: ID of the movie
+          type: integer
+        - name: language
+          in: query
+          type: string
+          description: Pass a ISO 639-1 value to display translated data for the fields that support it.
+        - name: page
+          in: query
+          type: integer
+          description: Specify which page to query.
+      responses:
+        200:
+          description: Returns list of movies
+          schema:
+            $ref: "#/definitions/MoviesListResponse"
+        401:
+          description: Unauthorized
+        404:
+          description: Movies not found
+
+definitions:
+  RegisterRequest:
+    type: object
+    properties: 
+      email:
+        type: string
+      password:
+        type: string
+  CommentRequest:
+    type: object
+    properties: 
+      userId:
+        type: string
+      comment:
+        type: string
+      movieId:
+        type: string
+  MoviesListResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: ID of the movie?
+      page:
+        type: integer
+      results:
+        type: array
+        items:
+          $ref: "#/definitions/ListResults"
+      total_pages:
+        type: integer
+      total_results:
+        type: integer
+  
+  ListResults:
+    type: object
+    properties:
+      id:
+        type: integer
+      descripton:
+        type: string
+      favorite_count:
+        type: integer
+      item_count:
+        type: integer
+      iso_639_1:
+        type: string
+      list_type:
+        type: string
+      name:
+        type: string
+      poster_path:
+        type: string
