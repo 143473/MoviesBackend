@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <Target Name="NSwag" BeforeTargets="Build">
-        <Exec Command="nswag run nswag.nswag /runtime:Net60" />
+        <Exec Command="$(NSwagExe_Net60) run nswag.nswag" />
     </Target>
 
 </Project>
