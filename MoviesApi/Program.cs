@@ -17,22 +17,9 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 
 //Repositories
 
-//Identity framework
-var connectionString = builder.Configuration.GetConnectionString("IdentityDb");
+// EF
+var connectionString = builder.Configuration.GetConnectionString("MoviesDb");
 builder.Services.AddDbContext<MoviesContext>(opt => opt.UseSqlServer(connectionString));
-
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<MoviesContext>();
-
-// NOT WORKING in cloud 
-builder.Services.AddDataProtection()
-    .SetApplicationName("MoviesApp")
-    .PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"));
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.Name = ".Yummy";
-});
 
 // Add services to the container.
 
