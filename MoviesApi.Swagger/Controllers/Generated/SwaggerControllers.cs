@@ -67,7 +67,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         public string Backdrop_path { get; set; }
 
         [Newtonsoft.Json.JsonProperty("belongs_to_collection", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.List<BelongsToCollection> Belongs_to_collection { get; set; }
+        public object Belongs_to_collection { get; set; }
 
         [Newtonsoft.Json.JsonProperty("budget", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? Budget { get; set; }
