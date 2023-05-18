@@ -78,7 +78,7 @@ definitions:
       backdrop_path:
         type: string
       belongs_to_collection:
-        type: array
+        type: object
         items:
           $ref: "#/definitions/BelongsToCollection"
       budget:
