@@ -68,6 +68,26 @@ paths:
           description: Unauthorized
         404:
           description: Movie not found
+  '/movies':
+    get:
+      tags:
+        - movies
+      operationId: GetMoviesByTitle
+      description: Get a list of movies by title
+      parameters:
+        - name: name
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns a list of movies
+          schema:
+            $ref: "#/definitions/MoviesListResponse"
+        401:
+          description: Unauthorized
+        404:
+          description: Movie not found
 
 definitions:
   MovieResponse:
@@ -222,7 +242,7 @@ definitions:
     properties:
       id:
         type: integer
-      descripton:
+      description:
         type: string
       favorite_count:
         type: integer

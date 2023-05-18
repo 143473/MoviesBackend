@@ -43,7 +43,59 @@ paths:
           description: Unauthorized
         404:
           description: Movies not found
-
+  
+  '/search/movie':
+    get:
+      tags:
+        - movies
+      operationId: GetMoviesByTitle
+      description: Get movies by title
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: query
+          in: query
+          type: string
+          required: true
+          description: Title of the movie
+        - name: include_adult
+          in: query
+          type: boolean
+          required: false
+          description: Include adult movies
+        - name: language
+          in: query
+          type: string
+          required: false
+          description: Language of the movie
+        - name: primary_release_year
+          in: query
+          type: string
+          required: false
+          description: Primary release year of the movie
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: Page number
+        - name: year
+          in: query
+          type: string
+          required: false
+          description: Year of the movie
+      responses:
+        200:
+          description: Returns list of movies
+          schema:
+            $ref: "#/definitions/MoviesResponse"
+        401:
+          description: Unauthorized
+        404:
+          description: Movies not found
+        
 definitions:
   MovieResponse:
     type: object
@@ -63,51 +115,51 @@ definitions:
         items:
           $ref: "#/definitions/Genre"
       homepage:
-         type: string
+        type: string
       id:
-         type: integer
+        type: integer
       imdb_id:
-         type: string
+        type: string
       original_language:
-         type: string
+        type: string
       original_title:
-         type: string
+        type: string
       overview:
-         type: string
+        type: string
       popularity:
-         type: number
-      poster_path: 
-         type: string
+        type: number
+      poster_path:
+        type: string
       production_companies:
-         type: array
-         items:
+        type: array
+        items:
           $ref: "#/definitions/ProductionCompany"
       production_countries:
-         type: array
-         items:
+        type: array
+        items:
           $ref: "#/definitions/ProductionCountry"
       release_date:
-         type: string
+        type: string
       revenue:
-         type: integer
+        type: integer
       runtime:
-         type: integer
+        type: integer
       spoken_languages:
-         type: array
-         items:
+        type: array
+        items:
           $ref: "#/definitions/SpokenLanguage"
       status:
-         type: string
+        type: string
       tagline:
-         type: string
+        type: string
       title:
-         type: string
+        type: string
       video:
-         type: boolean
+        type: boolean
       vote_average:
-         type: number
+        type: number
       vote_count:
-         type: integer
+        type: integer
 
   Genre:
     type: object
@@ -125,7 +177,7 @@ definitions:
       logo_path:
         type: string
       name:
-        type: string  
+        type: string
       origin_country:
         type: string
 
@@ -138,23 +190,71 @@ definitions:
         type: string
   
   SpokenLanguage:
-     type: object
-     properties:
-       english_name:
-         type: string
-       iso_639_1:
-         type: string
-       name:
-         type: string
+    type: object
+    properties:
+      english_name:
+        type: string
+      iso_639_1:
+        type: string
+      name:
+        type: string
 
   BelongsToCollection:
-     type: object
-     properties:
-       id:
-         type: integer
-       name:
-         type: string
-       poster_path:
-         type: string
-       backdrop_path:
-         type: string
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      poster_path:
+        type: string
+      backdrop_path:
+        type: string
+        
+  MoviesResponse:
+    type: object
+    properties:
+      page:
+        type: integer
+      results:
+        type: array
+        items:
+          $ref: "#/definitions/MovieByTitleResponse"
+      total_pages:
+        type: integer
+      total_results:
+        type: integer
+        
+  MovieByTitleResponse:
+    type: object
+    properties: 
+        adult:
+            type: boolean
+        backdrop_path:
+            type: string
+        genre_ids:
+            type: array
+            items:
+              type: integer
+        id:
+            type: integer
+        original_language:
+            type: string
+        original_title:
+            type: string
+        overview:
+            type: string
+        popularity:
+            type: number
+        poster_path:
+            type: string
+        release_date:
+            type: string
+        title:
+            type: string
+        video:
+            type: boolean
+        vote_average:
+            type: number
+        vote_count:
+            type: integer
