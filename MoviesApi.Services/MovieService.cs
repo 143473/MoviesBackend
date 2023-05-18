@@ -16,8 +16,8 @@ public class MovieService : IMovieService
         api_key = configuration.GetSection("TMDB")["APIKey"];
     }
 
-    public async Task<MoviesListResponse> GetMovies(int id, string language, int? page)
+    public async Task<MovieResponse> GetMovieAsync(int movie_id, string language = "en_US")
     {
-        return await _moviesClient.GetListOfMoviesAsync(id, api_key, language, page);
+        return await _moviesClient.GetMovieAsync(movie_id, api_key, language);
     }
 }
