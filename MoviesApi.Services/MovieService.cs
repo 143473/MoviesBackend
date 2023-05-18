@@ -1,11 +1,9 @@
 using Microsoft.Extensions.Configuration;
-using MoviesDB.API.Swagger.Controllers.Generated;
-using MoviesDb.Services.Interfaces;
+using MoviesApi.Services.Interfaces;
 using tmdb_api;
-using MovieResponse = tmdb_api.MovieResponse;
 
 
-namespace MoviesDb.Services;
+namespace MoviesApi.Services;
 
 public class MovieService : IMovieService
 {

@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "json": "swagger.yaml",
+      "json": "tmdb_swagger.yaml",
       "newLineBehavior": "Auto"
     }
   },

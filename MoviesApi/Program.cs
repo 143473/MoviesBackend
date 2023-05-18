@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MoviesApi.Data;
-using MoviesDb.Services;
-using MoviesDb.Services.Interfaces;
+using MoviesApi.Services;
+using MoviesApi.Services.Interfaces;
 using tmdb_api;
 
 var builder = WebApplication.CreateBuilder(args);

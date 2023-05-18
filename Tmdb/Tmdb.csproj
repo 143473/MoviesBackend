@@ -11,6 +11,10 @@
         <PackageReference Include="NSwag.MSBuild" Version="13.18.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Client\Generated\" />
+    </ItemGroup>
+
     <Target Name="NSwag" BeforeTargets="Build">
         <Exec Command="$(NSwagExe_Net60) run nswag.nswag" />
     </Target>

@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MoviesDB.API.Swagger.Controllers.Generated;
-using MoviesDb.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using MoviesApi.Services.Interfaces;
 
 namespace MoviesApi.Controllers;
 
