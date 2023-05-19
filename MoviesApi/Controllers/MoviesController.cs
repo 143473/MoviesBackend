@@ -23,12 +23,8 @@ public class MoviesController : MoviesControllerBase
         });
     }
     
-    public override Task<ActionResult<MoviesListResponse>> GetMoviesByTitle([BindRequired] string title)
+    public override async Task<ActionResult<MoviesResponseDto>> GetMoviesByTitle([BindRequired] string title)
     {
-        return Task.Run<ActionResult<MoviesListResponse>>(async () =>
-        {
-            var result = await _movieService.GetMoviesByTitleAsync(title);
-            return Ok(result);
-        });
+        return await _movieService.GetMoviesByTitleAsync(title);
     }
 }

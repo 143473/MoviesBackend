@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using MoviesApi.Services.Interfaces;
+using MoviesDB.API.Swagger.Controllers.Generated;
 using tmdb_api;
+using MovieResponse = tmdb_api.MovieResponse;
 
 
 namespace MoviesApi.Services;
@@ -21,8 +23,21 @@ public class MovieService : IMovieService
         return await _moviesClient.GetMovieAsync(movie_id, api_key, language);
     }
 
-    public async Task<MoviesResponse> GetMoviesByTitleAsync(string movieName, string language = "en_US")
+    public async Task<MoviesResponseDto> GetMoviesByTitleAsync(string movieName, string language = "en_US")
     {
-        return await _moviesClient.GetMoviesByTitleAsync(api_key,movieName, null, language);
+        var moviesResponse = await _moviesClient.GetMoviesByTitleAsync(api_key,movieName, null, language);
+
+        return new MoviesResponseDto
+        {
+            Results = moviesResponse.Results
+                .Select(r => new MovieByTitleResponseDto
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Description = r.Overview,
+                    Poster_path = $"https://image.tmdb.org/t/p/w500{r.Poster_path}"
+                })
+                .ToList()
+        };
     }
 }

@@ -75,7 +75,7 @@ paths:
       operationId: GetMoviesByTitle
       description: Get a list of movies by title
       parameters:
-        - name: name
+        - name: title
           in: query
           required: true
           type: string
@@ -83,7 +83,7 @@ paths:
         200:
           description: Returns a list of movies
           schema:
-            $ref: "#/definitions/MoviesListResponse"
+            $ref: "#/definitions/MoviesResponseDto"
         401:
           description: Unauthorized
         404:
@@ -220,24 +220,15 @@ definitions:
         type: string
       movieId:
         type: string
-  MoviesListResponse:
+  MoviesResponseDto:
     type: object
     properties:
-      id:
-        type: integer
-        description: ID of the movie?
-      page:
-        type: integer
       results:
         type: array
         items:
-          $ref: "#/definitions/ListResults"
-      total_pages:
-        type: integer
-      total_results:
-        type: integer
+          $ref: "#/definitions/MovieByTitleResponseDto"
   
-  ListResults:
+  MovieByTitleResponseDto:
     type: object
     properties:
       id:
@@ -246,13 +237,7 @@ definitions:
         type: string
       favorite_count:
         type: integer
-      item_count:
-        type: integer
-      iso_639_1:
-        type: string
-      list_type:
-        type: string
-      name:
+      title:
         type: string
       poster_path:
         type: string
