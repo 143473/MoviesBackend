@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'development'
+      name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -46,6 +46,6 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'dev-moviesapisep6'
-        slot-name: 'development'
+        slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_db9d5059d0c84e7c920e1987eeb0603c }}
         images: 'sepmoviesregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_9859be69999641fd8994b3075036eba1 }}/moviesapi-dev:${{ github.sha }}'
