@@ -35,7 +35,8 @@ public class MovieService : IMovieService
                     Id = r.Id,
                     Title = r.Title,
                     Description = r.Overview,
-                    Poster_path = !string.IsNullOrEmpty(r.Poster_path)
+                    ReleaseDate = r.Release_date,
+                    PosterPath = !string.IsNullOrEmpty(r.Poster_path)
                         ? $"https://image.tmdb.org/t/p/w500{r.Poster_path}"
                         : null
                 })

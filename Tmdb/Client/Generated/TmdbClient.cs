@@ -555,7 +555,7 @@ namespace tmdb_api
         public int? Page { get; set; }
 
         [Newtonsoft.Json.JsonProperty("results", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<MovieByTitleResponseTmdb> Results { get; set; }
+        public System.Collections.Generic.ICollection<MovieByTitleTmdb> Results { get; set; }
 
         [Newtonsoft.Json.JsonProperty("total_pages", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? Total_pages { get; set; }
@@ -566,7 +566,7 @@ namespace tmdb_api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MovieByTitleResponseTmdb
+    public partial class MovieByTitleTmdb
     {
         [Newtonsoft.Json.JsonProperty("adult", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool? Adult { get; set; }

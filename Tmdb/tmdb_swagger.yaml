@@ -219,13 +219,13 @@ definitions:
       results:
         type: array
         items:
-          $ref: "#/definitions/MovieByTitleResponseTmdb"
+          $ref: "#/definitions/MovieByTitleTmdb"
       total_pages:
         type: integer
       total_results:
         type: integer
         
-  MovieByTitleResponseTmdb:
+  MovieByTitleTmdb:
     type: object
     properties: 
         adult:

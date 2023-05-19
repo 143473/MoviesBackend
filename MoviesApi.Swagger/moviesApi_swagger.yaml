@@ -223,21 +223,22 @@ definitions:
   MoviesResponseDto:
     type: object
     properties:
-      results:
+      Results:
         type: array
         items:
           $ref: "#/definitions/MovieByTitleResponseDto"
-  
   MovieByTitleResponseDto:
     type: object
     properties:
-      id:
+      Id:
         type: integer
-      description:
+      Description:
         type: string
-      favorite_count:
+      FavoriteCount:
         type: integer
-      title:
+      Title:
         type: string
-      poster_path:
+      PosterPath:
+        type: string
+      ReleaseDate:
         type: string
