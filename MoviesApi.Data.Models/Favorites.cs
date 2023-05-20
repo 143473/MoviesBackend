@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace MoviesApi.Data.Models;
+﻿namespace MoviesApi.Data.Models;
 
 public class Favorites
 {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+    public FavoriteMovie FavoriteMovie { get; set; } = null!;
+    // setting a composite pk out of these two ids in the onModelCreate in dbcontext
+    public int FavoriteMovieId { get; set; }
     public int UserId { get; set; }
 }

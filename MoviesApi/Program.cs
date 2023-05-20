@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MoviesApi.Data;
+using MoviesApi.Data.Repositories;
+using MoviesApi.Data.Repositories.Interfaces;
 using MoviesApi.Services;
 using MoviesApi.Services.Interfaces;
 using tmdb_api;
@@ -16,10 +16,11 @@ builder.Services.AddScoped<IMoviesClient>( _ => new MoviesClient(){BaseUrl = bui
 builder.Services.AddScoped<IMovieService, MovieService>();
 
 //Repositories
+builder.Services.AddScoped<IMoviesRepository, MoviesRepository>();
 
 // EF
 var connectionString = builder.Configuration.GetConnectionString("MoviesDb");
-builder.Services.AddDbContext<MoviesContext>(opt => opt.UseSqlServer(connectionString));
+builder.Services.AddDbContext<IMoviesContext, MoviesContext>(opt => opt.UseSqlServer(connectionString));
 
 // Add services to the container.
 

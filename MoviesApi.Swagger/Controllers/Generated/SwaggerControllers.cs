@@ -55,6 +55,14 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies")]
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MoviesResponseDto>> GetMoviesByTitle([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string title);
 
+        /// <returns>Return a list of favorite movies for a specific user</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies/favorites")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<MovieDto>>> GetFavoriteMovies([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] int userId);
+
+        /// <returns>Return a list of top favorite movies</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies/top-favorites")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<MovieDto>>> GetTopFavoriteMovies();
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -340,7 +348,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
     public partial class MoviesResponseDto
     {
         [Newtonsoft.Json.JsonProperty("Results", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.List<MovieByTitleResponseDto> Results { get; set; }
+        public System.Collections.Generic.List<MovieDto> Results { get; set; }
 
         public string ToJson()
         {
@@ -358,7 +366,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MovieByTitleResponseDto
+    public partial class MovieDto
     {
         [Newtonsoft.Json.JsonProperty("Id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? Id { get; set; }
@@ -384,10 +392,10 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static MovieByTitleResponseDto FromJson(string data)
+        public static MovieDto FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<MovieByTitleResponseDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<MovieDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 

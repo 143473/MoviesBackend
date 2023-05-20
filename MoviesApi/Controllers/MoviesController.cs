@@ -27,4 +27,14 @@ public class MoviesController : MoviesControllerBase
     {
         return await _movieService.GetMoviesByTitleAsync(title);
     }
+
+    public override async Task<ActionResult<ICollection<MovieDto>>> GetFavoriteMovies(int userId)
+    {
+        return new ActionResult<ICollection<MovieDto>>(await _movieService.GetFavoriteMovies(userId));
+    }
+
+    public override async Task<ActionResult<ICollection<MovieDto>>> GetTopFavoriteMovies()
+    {
+        return new ActionResult<ICollection<MovieDto>>(await _movieService.GetTopFavoriteMovies());
+    }
 }
