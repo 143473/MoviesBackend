@@ -8,6 +8,6 @@ public class MoviesContext : IdentityDbContext<IdentityUser>
 {
     public MoviesContext(DbContextOptions options) : base(options)
     {
-        Database.EnsureCreated();
+        Database.Migrate();
     }
 }
