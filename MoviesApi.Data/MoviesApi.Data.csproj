@@ -18,4 +18,15 @@
       <ProjectReference Include="..\MoviesApi.Data.Models\MoviesApi.Data.Models.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Migrations\20230520103921_initial.cs" />
+      <Compile Remove="Migrations\20230520103921_initial.Designer.cs" />
+      <Compile Remove="Migrations\20230520105620_initial.Designer.cs" />
+      <Compile Remove="Migrations\20230520110844_initial.Designer.cs" />
+    </ItemGroup>
+
 </Project>
