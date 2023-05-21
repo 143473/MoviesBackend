@@ -24,7 +24,11 @@ public class MovieService : IMovieService
 
     public async Task<MovieResponse> GetMovieAsync(int movie_id, string language = "en_US")
     {
-        return await _moviesClient.GetMovieAsync(movie_id, api_key, language);
+        var movieResponse = await _moviesClient.GetMovieAsync(movie_id, api_key, language);
+        movieResponse.Poster_path = !string.IsNullOrEmpty(movieResponse.Poster_path)
+            ? $"https://image.tmdb.org/t/p/w500{movieResponse.Poster_path}"
+            : null;
+        return movieResponse;
     }
 
     public async Task<MoviesResponseDto> GetMoviesByTitleAsync(string movieName, string language = "en_US")
