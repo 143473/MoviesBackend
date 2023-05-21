@@ -64,8 +64,8 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<MovieDto>>> GetTopFavoriteMovies();
 
         /// <returns>Return the rating of a movie</returns>
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movie/rating")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Rating>> GetMovieRating([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] int movieId);
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movie/rating/{movie_id}")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Rating>> GetMovieRating([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] int movieId);
 
     }
 

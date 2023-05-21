@@ -35,16 +35,22 @@ public class MoviesRepository : IMoviesRepository
 
     public async Task<Rating> GetMovieRatingAsync(int movieId)
     {
-        Rating? rating;
+        Rating rating = new Rating
+        {
+            MovieId = 0,
+            RatingValue = 0,
+            Votes = 0
+        };
+        
         try
         {
             rating = await _context.Ratings.FirstAsync(r => r.MovieId == movieId);
+            return rating;
         }
         catch (InvalidOperationException)
         {
-            rating = null;
+            return rating;
         }
-
-        return rating;
+        
     }
 }

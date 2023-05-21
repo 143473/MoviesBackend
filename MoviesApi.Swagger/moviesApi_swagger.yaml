@@ -117,14 +117,14 @@ paths:
             type: array
             items:
               $ref: "#/definitions/MovieDto"
-  '/movie/rating':
+  '/movie/rating/{movie_id}':
     get:
       tags:
         - movies
       operationId: GetMovieRating
       parameters:
         - name: movieId
-          in: query
+          in: path
           required: true
           type: integer
       responses:
