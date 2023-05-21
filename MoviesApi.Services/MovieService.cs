@@ -140,20 +140,22 @@ public class MovieService : IMovieService
                    RatingValue = newRatingValue,
                    Votes = newVotes
                };
-               await _repository.AddRatingAsync(rating);
+               await _repository.UpdateOnlyRatingAsync(rating);
            }
        }
        else
        {
-           newVotes = (int) (rating.Votes - 1);
-           newRatingValue = ((rating.RatingValue * rating.Votes) - ratedMovie.Rating.Value)/ newVotes;
+           int oldVotes = (int) (rating.Votes - 1);
+           double oldRatingValue = ((rating.RatingValue * rating.Votes) - ratedMovie.Rating.Value)/ oldVotes;
+           newVotes = (int) (rating.Votes + 1);
+           newRatingValue = ((oldRatingValue * rating.Votes) + ratedMovie.Rating.Value)/ newVotes;
            rating = new Rating
            {
                MovieId = movie.RatedMovieId,
                RatingValue = newRatingValue,
                Votes = rating.Votes
            };
-           
+
            await _repository.UpdateRatingAsync(rating, movie);
        }
 

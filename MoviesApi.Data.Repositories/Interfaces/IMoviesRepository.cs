@@ -12,4 +12,5 @@ public interface IMoviesRepository
     Task<RatedMovie> GetMovieRatingByUserId(string userId, int movieId);
     Task<Rating> AddRatingAsync(Rating rating);
     Task UpdateRatingAsync(Rating rating, RatedMovie ratedMovie);
+    Task UpdateOnlyRatingAsync(Rating rating);
 }

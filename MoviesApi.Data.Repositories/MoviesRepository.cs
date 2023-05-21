@@ -110,9 +110,17 @@ public class MoviesRepository : IMoviesRepository
         await _context.SaveChangesAsync();
         
         RatedMovie movieToUpdate = await _context.RatedMovies.FirstAsync(m => m.RatedMovieId == ratedMovie.RatedMovieId && m.UserId == ratedMovie.UserId);
-        movieToUpdate.RatedMovieId = ratedMovie.RatedMovieId;
-        movieToUpdate.UserId = ratedMovie.UserId;
+        movieToUpdate.Rating = ratedMovie.Rating;
         _context.Update(movieToUpdate);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateOnlyRatingAsync(Rating rating)
+    {
+        Rating ratingToUpdate = await _context.Ratings.FirstAsync(r => r.MovieId == rating.MovieId);
+        ratingToUpdate.Votes = rating.Votes;
+        ratingToUpdate.RatingValue = rating.RatingValue;
+        _context.Update(ratingToUpdate);
         await _context.SaveChangesAsync();
     }
 }
