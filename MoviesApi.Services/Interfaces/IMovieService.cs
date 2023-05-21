@@ -7,6 +7,7 @@ public interface IMovieService
 {
     Task<MovieResponse> GetMovieAsync(int movie_id, string language = "en_US");
     Task<MoviesResponseDto> GetMoviesByTitleAsync(string movieName, string language = "en_US");
-    Task<ICollection<MovieDto>> GetFavoriteMovies(string userId);
-    Task<ICollection<MovieDto>> GetTopFavoriteMovies();
+    Task<MoviesResponseDto> GetFavoriteMovies(string userId);
+    Task<MoviesResponseDto> GetTopFavoriteMovies();
+    Task AddMovieToFavorite(FavoritesDto favoritesDto);
 }

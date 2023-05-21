@@ -6,14 +6,13 @@ using MoviesDB.API.Swagger.Controllers.Generated;
 using tmdb_api;
 using MovieResponse = tmdb_api.MovieResponse;
 
-
 namespace MoviesApi.Services;
 
 public class MovieService : IMovieService
 {
     private readonly IMoviesClient _moviesClient;
-    private string api_key;
     private readonly IMoviesRepository _repository;
+    private string api_key;
 
     public MovieService(IMoviesClient moviesClient, IConfiguration configuration, IMoviesRepository repository)
     {
@@ -40,7 +39,7 @@ public class MovieService : IMovieService
             Results = moviesResponse.Results
                 .Select(r => new MovieDto
                 {
-                    Id = r.Id,
+                    MovieId = r.Id ?? 0,
                     Title = r.Title,
                     Description = r.Overview,
                     ReleaseDate = r.Release_date,
@@ -52,23 +51,41 @@ public class MovieService : IMovieService
         };
     }
     
-    public async Task<ICollection<MovieDto>> GetFavoriteMovies(string userId)
+    public async Task<MoviesResponseDto> GetFavoriteMovies(string userId)
     {
-        var favorites = await _repository.GetFavoritesMovies(userId);
-        return favorites.Select(ToMovieDto).ToList();
+        return ToMovieDto(await _repository.GetFavoritesMovies(userId));
     }
     
-    public async Task<ICollection<MovieDto>> GetTopFavoriteMovies()
+    public async Task<MoviesResponseDto> GetTopFavoriteMovies()
     {
-        var favorites = await _repository.GetTopFavoritesMovies();
-        return favorites.Select(ToMovieDto).ToList();
+        return ToMovieDto(await _repository.GetTopFavoritesMovies());
     }
 
+    public async Task AddMovieToFavorite(FavoritesDto favoritesDto)
+    {
+        var movie = await GetMovieAsync(favoritesDto.MovieId);
+        var favoriteMovie = new FavoriteMovie
+        {
+            FavoriteMovieId = movie.Id ?? 0,
+            Title = movie.Title,
+            Overview = movie.Overview,
+            ReleaseDate = movie.Release_date,
+            ImageUrl = movie.Poster_path
+        };
+        
+           await _repository.AddFavoriteMovie(favoritesDto.UserId, favoriteMovie);
+    }
+
+    private static MoviesResponseDto ToMovieDto(IEnumerable<FavoriteMovie> favoriteMovies)
+    {
+        return new MoviesResponseDto { Results = favoriteMovies.Select(ToMovieDto).ToList() };
+    }
+    
     private static MovieDto ToMovieDto(FavoriteMovie favoriteMovie)
     {
         return new MovieDto
         {
-            Id = favoriteMovie.FavoriteMovieId,
+            MovieId = favoriteMovie.FavoriteMovieId,
             Title = favoriteMovie.Title,
             Description = favoriteMovie.Overview,
             ReleaseDate = favoriteMovie.ReleaseDate,

@@ -9,4 +9,5 @@ public interface IMoviesContext
     DbSet<Favorites> Favorites { get; set; }
     DbSet<Rating> Ratings { get; set; }
     DbSet<RatedMovie> RatedMovies { get; set; }
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = new());
 }
