@@ -88,7 +88,35 @@ paths:
           description: Unauthorized
         404:
           description: Movie not found
-
+  '/movies/favorites':
+    get:
+      tags:
+        - movies
+      operationId: GetFavoriteMovies
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          type: integer
+      responses:
+         200:
+          description: Return a list of favorite movies for a specific user
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MovieDto"
+  '/movies/top-favorites':
+    get:
+      tags:
+        - movies
+      operationId: GetTopFavoriteMovies
+      responses:
+        200:
+          description: Return a list of top favorite movies
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MovieDto"
 definitions:
   MovieResponse:
     type: object
@@ -226,8 +254,8 @@ definitions:
       Results:
         type: array
         items:
-          $ref: "#/definitions/MovieByTitleResponseDto"
-  MovieByTitleResponseDto:
+          $ref: "#/definitions/MovieDto"
+  MovieDto:
     type: object
     properties:
       Id:
