@@ -5,6 +5,7 @@ using MoviesApi.Services.Interfaces;
 using MoviesDB.API.Swagger.Controllers.Generated;
 using tmdb_api;
 using MovieResponse = tmdb_api.MovieResponse;
+using Rating = MoviesDB.API.Swagger.Controllers.Generated.Rating;
 
 namespace MoviesApi.Services;
 
@@ -80,7 +81,10 @@ public class MovieService : IMovieService
     {
         return new MoviesResponseDto { Results = favoriteMovies.Select(ToMovieDto).ToList() };
     }
-    
+    public async Task<Data.Models.Rating> GetMovieRatingAsync(int movieId)
+    {
+        return await _repository.GetMovieRatingAsync(movieId);
+    }
     private static MovieDto ToMovieDto(FavoriteMovie favoriteMovie)
     {
         return new MovieDto

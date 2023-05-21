@@ -1,5 +1,6 @@
 using MoviesDB.API.Swagger.Controllers.Generated;
 using MovieResponse = tmdb_api.MovieResponse;
+using Rating = MoviesApi.Data.Models.Rating;
 
 namespace MoviesApi.Services.Interfaces;
 
@@ -10,4 +11,5 @@ public interface IMovieService
     Task<MoviesResponseDto> GetFavoriteMovies(string userId);
     Task<MoviesResponseDto> GetTopFavoriteMovies();
     Task AddMovieToFavorite(FavoritesDto favoritesDto);
+    Task<Rating> GetMovieRatingAsync(int movieId);
 }

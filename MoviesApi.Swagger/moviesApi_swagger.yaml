@@ -126,6 +126,25 @@ paths:
           description: Return a list of top favorite movies
           schema:
             $ref: "#/definitions/MoviesResponseDto"
+  '/movie/rating/{movie_id}':
+    get:
+      tags:
+        - movies
+      operationId: GetMovieRating
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Return the rating of a movie
+          schema:
+            $ref: "#/definitions/Rating"
+        401:
+            description: Unauthorized
+        404:
+            description: Movie not found
 definitions:
   MovieResponse:
     type: object
@@ -291,3 +310,12 @@ definitions:
     required:
       - MovieId
       - UserId
+  Rating:
+    type: object
+    properties:
+      movieId:
+        type: integer
+      ratingValue:
+        type: number
+      votes: 
+        type: integer
