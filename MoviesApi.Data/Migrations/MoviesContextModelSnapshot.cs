@@ -79,10 +79,7 @@ namespace MoviesApi.Data.Migrations
             modelBuilder.Entity("MoviesApi.Data.Models.Rating", b =>
                 {
                     b.Property<int>("MovieId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MovieId"), 1L, 1);
 
                     b.Property<double>("RatingValue")
                         .HasColumnType("float");

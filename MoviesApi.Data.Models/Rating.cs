@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace MoviesApi.Data.Models;
-
 public class Rating
 {
     [Key]

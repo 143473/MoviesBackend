@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using MoviesDB.API.Swagger.Controllers.Generated;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MoviesApi.Services.Interfaces;
-using RatedMovie = MoviesApi.Data.Models.RatedMovie;
 
 namespace MoviesApi.Controllers;
 
@@ -59,6 +58,15 @@ public class MoviesController : MoviesControllerBase
         return Task.Run<IActionResult>(async () =>
         {
             var result = await _movieService.AddRatedMovieAsync(ratedMovie);
+            return Ok(result);
+        });
+    }
+
+    public override Task<IActionResult> AddRating(RatedMovieDto ratedMovie)
+    {
+        return Task.Run<IActionResult>(async () =>
+        {
+            var result = await _movieService.AddRatingAsync(ratedMovie);
             return Ok(result);
         });
     }

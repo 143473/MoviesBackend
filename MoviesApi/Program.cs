@@ -20,7 +20,11 @@ builder.Services.AddScoped<IMoviesRepository, MoviesRepository>();
 
 // EF
 var connectionString = builder.Configuration.GetConnectionString("MoviesDb");
-builder.Services.AddDbContext<IMoviesContext, MoviesContext>(opt => opt.UseSqlServer(connectionString));
+builder.Services.AddDbContext<IMoviesContext, MoviesContext>(opt =>
+{
+    opt.UseSqlServer(connectionString);
+    opt.EnableSensitiveDataLogging();
+});
 
 // Add services to the container.
 

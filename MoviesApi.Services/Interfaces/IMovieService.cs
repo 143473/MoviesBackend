@@ -13,4 +13,5 @@ public interface IMovieService
     Task AddMovieToFavorite(FavoritesDto favoritesDto);
     Task<Rating> GetMovieRatingAsync(int movieId);
     Task<RatedMovieDto> AddRatedMovieAsync(RatedMovieDto ratedMovie);
+    Task<RatingDto> AddRatingAsync(RatedMovieDto ratedMovie);
 }

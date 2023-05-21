@@ -80,7 +80,8 @@ public class MovieService : IMovieService
     {
         return new MoviesResponseDto { Results = favoriteMovies.Select(ToMovieDto).ToList() };
     }
-    public async Task<Data.Models.Rating> GetMovieRatingAsync(int movieId)
+    
+    public async Task<Rating> GetMovieRatingAsync(int movieId)
     {
         return await _repository.GetMovieRatingAsync(movieId);
     }
@@ -98,6 +99,73 @@ public class MovieService : IMovieService
 
         return ratedMovie;
     }
+
+    public async Task<RatingDto> AddRatingAsync(RatedMovieDto ratedMovie)
+    {
+        RatedMovie movie = new RatedMovie
+        {
+            RatedMovieId = ratedMovie.RatedMovieId.Value,
+            UserId = ratedMovie.UserId,
+            Rating = ratedMovie.Rating.Value
+        };
+
+       RatedMovie existingMovie = await _repository.GetMovieRatingByUserId(movie.UserId, movie.RatedMovieId);
+       Rating rating = await GetMovieRatingAsync(movie.RatedMovieId);
+       double newRatingValue;
+       int newVotes;
+       if (existingMovie.RatedMovieId == 0)
+       {
+           await _repository.AddRatedMovieAsync(movie);
+           if (rating.MovieId == 0)
+           {
+               var movieResponse = await _moviesClient.GetMovieAsync(movie.RatedMovieId, api_key, "en_US");
+               newVotes = movieResponse.Vote_count.Value + 1;
+               newRatingValue = ((movieResponse.Vote_average.Value * movieResponse.Vote_count.Value) +
+                            ratedMovie.Rating.Value) / newVotes;
+               rating = new Rating
+               {
+                   MovieId = movie.RatedMovieId,
+                   RatingValue = newRatingValue,
+                   Votes = newVotes
+               };
+               await _repository.AddRatingAsync(rating);
+           }
+           else
+           {
+               newVotes = (int) (rating.Votes + 1);
+               newRatingValue = ((rating.RatingValue * rating.Votes) + ratedMovie.Rating.Value)/ newVotes;
+               rating = new Rating
+               {
+                   MovieId = movie.RatedMovieId,
+                   RatingValue = newRatingValue,
+                   Votes = newVotes
+               };
+               await _repository.AddRatingAsync(rating);
+           }
+       }
+       else
+       {
+           newVotes = (int) (rating.Votes - 1);
+           newRatingValue = ((rating.RatingValue * rating.Votes) - ratedMovie.Rating.Value)/ newVotes;
+           rating = new Rating
+           {
+               MovieId = movie.RatedMovieId,
+               RatingValue = newRatingValue,
+               Votes = rating.Votes
+           };
+           
+           await _repository.UpdateRatingAsync(rating, movie);
+       }
+
+       RatingDto newRating = new RatingDto
+       {
+           MovieId = rating.MovieId,
+           RatingValue = rating.RatingValue,
+           Votes = (int?) rating.Votes
+       };
+       return newRating;
+    }
+    
 
     private static MovieDto ToMovieDto(FavoriteMovie favoriteMovie)
     {

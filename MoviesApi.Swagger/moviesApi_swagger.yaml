@@ -161,6 +161,22 @@ paths:
           description: Created
         400:
           description: Bad Request
+  '/movie/rating':
+    post:
+      tags:
+        - movies
+      operationId: AddRating
+      parameters:
+        - name: rating
+          in: body
+          schema:
+            $ref: "#/definitions/RatedMovieDto"
+          required: true
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
 definitions:
   MovieResponse:
     type: object

@@ -28,6 +28,10 @@ public class MoviesContext : DbContext, IMoviesContext
         
         modelBuilder.Entity<RatedMovie>()
             .HasKey(rm => new {rm.RatedMovieId, rm.UserId});
+        
+        modelBuilder.Entity<Rating>()
+            .Property(p => p.MovieId)
+            .ValueGeneratedNever();
 
         base.OnModelCreating(modelBuilder);
     }
