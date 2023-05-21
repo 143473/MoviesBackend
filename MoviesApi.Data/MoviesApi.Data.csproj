@@ -18,8 +18,4 @@
       <ProjectReference Include="..\MoviesApi.Data.Models\MoviesApi.Data.Models.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Migrations\" />
-    </ItemGroup>
-
 </Project>

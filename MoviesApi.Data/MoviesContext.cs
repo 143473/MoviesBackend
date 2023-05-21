@@ -12,7 +12,9 @@ public class MoviesContext : DbContext, IMoviesContext
 
     public DbSet<FavoriteMovie> FavoriteMovies { get; set; } = null!;
     public DbSet<Favorites> Favorites { get; set; } = null!;
-    
+    public DbSet<Rating> Ratings { get; set; } = null!;
+    public DbSet<RatedMovie> RatedMovies { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //creating a composite primary key

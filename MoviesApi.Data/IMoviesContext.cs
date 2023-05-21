@@ -7,4 +7,6 @@ public interface IMoviesContext
 {
     DbSet<FavoriteMovie> FavoriteMovies { get; set; }
     DbSet<Favorites> Favorites { get; set; }
+    DbSet<Rating> Ratings { get; set; }
+    DbSet<RatedMovie> RatedMovies { get; set; }
 }

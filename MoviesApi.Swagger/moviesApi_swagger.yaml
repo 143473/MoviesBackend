@@ -97,7 +97,7 @@ paths:
         - name: userId
           in: query
           required: true
-          type: integer
+          type: string
       responses:
          200:
           description: Return a list of favorite movies for a specific user

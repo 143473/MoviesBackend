@@ -48,7 +48,7 @@ public class MovieService : IMovieService
         };
     }
     
-    public async Task<ICollection<MovieDto>> GetFavoriteMovies(int userId)
+    public async Task<ICollection<MovieDto>> GetFavoriteMovies(string userId)
     {
         var favorites = await _repository.GetFavoritesMovies(userId);
         return favorites.Select(ToMovieDto).ToList();

@@ -4,6 +4,6 @@ namespace MoviesApi.Data.Repositories.Interfaces;
 
 public interface IMoviesRepository
 {
-    Task<ICollection<FavoriteMovie>> GetFavoritesMovies(int userId);
+    Task<ICollection<FavoriteMovie>> GetFavoritesMovies(string userId);
     Task<ICollection<FavoriteMovie>> GetTopFavoritesMovies();
 }

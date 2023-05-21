@@ -13,7 +13,7 @@ public class MoviesRepository : IMoviesRepository
         _context = context;
     }
 
-    public async Task<ICollection<FavoriteMovie>> GetFavoritesMovies(int userId)
+    public async Task<ICollection<FavoriteMovie>> GetFavoritesMovies(string userId)
     {
         return await _context.Favorites
             .Where(x => x.UserId == userId)
