@@ -18,7 +18,10 @@ public class MoviesContext : DbContext
             .HasOne<Favorites>()
             .WithMany()
             .HasForeignKey(f => f.FavoriteMovieId);
-        
+
+        modelBuilder.Entity<RatedMovie>()
+            .HasKey(rm => new {rm.RatedMovieId, rm.UserId});
+
         base.OnModelCreating(modelBuilder);
     }
 }
