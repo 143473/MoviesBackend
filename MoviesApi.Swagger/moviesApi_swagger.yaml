@@ -326,7 +326,7 @@ definitions:
     required:
       - MovieId
       - UserId
-  Rating:
+  RatingDto:
     type: object
     properties:
       movieId:
