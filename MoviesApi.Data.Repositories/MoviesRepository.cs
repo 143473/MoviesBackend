@@ -32,4 +32,19 @@ public class MoviesRepository : IMoviesRepository
         
         return result.Select(x => x.Movie).ToList();
     }
+
+    public async Task<Rating> GetMovieRatingAsync(int movieId)
+    {
+        Rating? rating;
+        try
+        {
+            rating = await _context.Ratings.FirstAsync(r => r.MovieId == movieId);
+        }
+        catch (InvalidOperationException)
+        {
+            rating = null;
+        }
+
+        return rating;
+    }
 }

@@ -117,6 +117,25 @@ paths:
             type: array
             items:
               $ref: "#/definitions/MovieDto"
+  '/movie/rating':
+    get:
+      tags:
+        - movies
+      operationId: GetMovieRating
+      parameters:
+        - name: movieId
+          in: query
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Return the rating of a movie
+          schema:
+            $ref: "#/definitions/Rating"
+        401:
+            description: Unauthorized
+        404:
+            description: Movie not found
 definitions:
   MovieResponse:
     type: object
@@ -270,3 +289,12 @@ definitions:
         type: string
       ReleaseDate:
         type: string
+  Rating:
+    type: object
+    properties:
+      movieId:
+        type: integer
+      ratingValue:
+        type: number
+      votes: 
+        type: integer
