@@ -102,9 +102,20 @@ paths:
          200:
           description: Return a list of favorite movies for a specific user
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/MovieDto"
+            $ref: "#/definitions/MoviesResponseDto"
+    post:
+      tags:
+        - movies
+      operationId: CreateFavoriteMovie
+      parameters:
+        - name: favoritesDto
+          in: body
+          schema:
+            $ref: "#/definitions/FavoritesDto"
+          required: true
+      responses:
+        200:
+          description: Favorite movie created
   '/movies/top-favorites':
     get:
       tags:
@@ -114,9 +125,7 @@ paths:
         200:
           description: Return a list of top favorite movies
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/MovieDto"
+            $ref: "#/definitions/MoviesResponseDto"
   '/movie/rating/{movie_id}':
     get:
       tags:
@@ -293,7 +302,7 @@ definitions:
   MovieDto:
     type: object
     properties:
-      Id:
+      MovieId:
         type: integer
       Description:
         type: string
@@ -305,7 +314,19 @@ definitions:
         type: string
       ReleaseDate:
         type: string
-  RatingDto:
+    required:
+      - MovieId
+  FavoritesDto:
+    type: object
+    properties:
+      MovieId:
+        type: integer
+      UserId:
+        type: string
+    required:
+      - MovieId
+      - UserId
+  Rating:
     type: object
     properties:
       movieId:

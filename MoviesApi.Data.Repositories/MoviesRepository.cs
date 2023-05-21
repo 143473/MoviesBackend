@@ -18,19 +18,33 @@ public class MoviesRepository : IMoviesRepository
         return await _context.Favorites
             .Where(x => x.UserId == userId)
             .Select(x => x.FavoriteMovie)
-            .ToListAsync();;
+            .ToListAsync();
     }
 
     public async Task<ICollection<FavoriteMovie>> GetTopFavoritesMovies()
-    {       
+    {
         var result = await _context.Favorites
             .GroupBy(favorites => favorites.FavoriteMovieId)
             .Select(grouping => new { Movie = grouping.First().FavoriteMovie, Count = grouping.Count() })
             .OrderByDescending(movieCount => movieCount.Count)
             .Take(10)
             .ToListAsync();
-        
+
         return result.Select(x => x.Movie).ToList();
+    }
+
+    public async Task AddFavoriteMovie(string userId, FavoriteMovie favoriteMovie)
+    {
+        var existingMovie = await _context.FavoriteMovies
+            .FirstOrDefaultAsync(fm => fm.FavoriteMovieId == favoriteMovie.FavoriteMovieId);
+        
+        await _context.Favorites.AddAsync(new Favorites
+        {
+            UserId = userId,
+            FavoriteMovie = existingMovie ?? favoriteMovie
+        });
+        
+        await _context.SaveChangesAsync();
     }
 
     public async Task<Rating> GetMovieRatingAsync(int movieId)
