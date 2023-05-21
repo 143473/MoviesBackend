@@ -65,7 +65,11 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
 
         /// <returns>Return the rating of a movie</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movie/rating/{movie_id}")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Rating>> GetMovieRating([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] int movieId);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<RatingDto>> GetMovieRating([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] int movieId);
+
+        /// <returns>Created</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("movie/rated-movie")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> AddRatedMovie([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] RatedMovieDto ratedMovie);
 
     }
 
@@ -406,7 +410,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class Rating
+    public partial class RatingDto
     {
         [Newtonsoft.Json.JsonProperty("movieId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? MovieId { get; set; }
@@ -423,10 +427,37 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static Rating FromJson(string data)
+        public static RatingDto FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Rating>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<RatingDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RatedMovieDto
+    {
+        [Newtonsoft.Json.JsonProperty("ratedMovieId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? RatedMovieId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("rating", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double? Rating { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static RatedMovieDto FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<RatedMovieDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 

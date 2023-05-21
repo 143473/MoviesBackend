@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoviesApi.Data;
 
@@ -10,9 +11,10 @@ using MoviesApi.Data;
 namespace MoviesApi.Data.Migrations
 {
     [DbContext(typeof(MoviesContext))]
-    partial class MoviesContextModelSnapshot : ModelSnapshot
+    [Migration("20230521133406_RemoveRatings")]
+    partial class RemoveRatings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,41 +60,6 @@ namespace MoviesApi.Data.Migrations
                     b.HasKey("FavoriteMovieId", "UserId");
 
                     b.ToTable("Favorites");
-                });
-
-            modelBuilder.Entity("MoviesApi.Data.Models.RatedMovie", b =>
-                {
-                    b.Property<int>("RatedMovieId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
-
-                    b.HasKey("RatedMovieId", "UserId");
-
-                    b.ToTable("RatedMovies");
-                });
-
-            modelBuilder.Entity("MoviesApi.Data.Models.Rating", b =>
-                {
-                    b.Property<int>("MovieId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MovieId"), 1L, 1);
-
-                    b.Property<double>("RatingValue")
-                        .HasColumnType("float");
-
-                    b.Property<long>("Votes")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("MovieId");
-
-                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("MoviesApi.Data.Models.Favorites", b =>

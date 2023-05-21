@@ -3,7 +3,7 @@ namespace MoviesApi.Data.Models;
 
 public class RatedMovie
 {
-    public string RatedMovieId { get; set; } = null!;
-    public int UserId { get; set; }
+    public int RatedMovieId { get; set; }
+    public string UserId { get; set; } = null!;
     public double Rating { get; set; }
 }

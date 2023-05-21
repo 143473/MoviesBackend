@@ -6,9 +6,9 @@ namespace MoviesApi.Data.Repositories;
 
 public class MoviesRepository : IMoviesRepository
 {
-    private readonly IMoviesContext _context;
+    private readonly MoviesContext _context;
 
-    public MoviesRepository(IMoviesContext context)
+    public MoviesRepository(MoviesContext context)
     {
         _context = context;
     }
@@ -52,5 +52,11 @@ public class MoviesRepository : IMoviesRepository
             return rating;
         }
         
+    }
+
+    public async Task AddRatedMovieAsync(RatedMovie ratedMovie)
+    {
+        await _context.RatedMovies.AddAsync(ratedMovie);
+        await _context.SaveChangesAsync();
     }
 }
