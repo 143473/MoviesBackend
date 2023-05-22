@@ -30,22 +30,26 @@ public class MovieService : IMovieService
         return movieResponse;
     }
 
-    public async Task<MoviesResponseDto> GetMoviesByTitleAsync(string movieName, string language = "en_US")
+    public async Task<MoviesResponseDto> GetMoviesByTitleAsync(string? userId, string movieName,
+        string language = "en_US")
     {
         var moviesResponse = await _moviesClient.GetMoviesByTitleAsync(api_key,movieName, null, language);
-
+        var movieIds = moviesResponse.Results.Select(r => r.Id);
+        var favoriteMovieIds = await GetFavorites(userId, movieIds);
+        
         return new MoviesResponseDto
         {
             Results = moviesResponse.Results
                 .Select(r => new MovieDto
                 {
-                    MovieId = r.Id ?? 0,
+                    MovieId = r.Id,
                     Title = r.Title,
                     Description = r.Overview,
                     ReleaseDate = r.Release_date,
                     PosterPath = !string.IsNullOrEmpty(r.Poster_path)
                         ? $"https://image.tmdb.org/t/p/w500{r.Poster_path}"
-                        : null
+                        : null,
+                    IsFavorite = favoriteMovieIds.Contains(r.Id)
                 })
                 .ToList()
         };
@@ -53,34 +57,65 @@ public class MovieService : IMovieService
     
     public async Task<MoviesResponseDto> GetFavoriteMovies(string userId)
     {
-        return ToMovieDto(await _repository.GetFavoritesMovies(userId));
+        var favorites = await _repository.GetFavorites(userId);
+        var favoriteIds = favorites.Select(f => f.FavoriteMovieId).ToHashSet();
+        return ToMovieDto(favorites, favoriteIds);
     }
     
-    public async Task<MoviesResponseDto> GetTopFavoriteMovies()
+    public async Task<MoviesResponseDto> GetTopFavoriteMovies(string? userId)
     {
-        return ToMovieDto(await _repository.GetTopFavoritesMovies());
-    }
-
-    public async Task AddMovieToFavorite(FavoritesDto favoritesDto)
-    {
-        var movie = await GetMovieAsync(favoritesDto.MovieId);
-        var favoriteMovie = new FavoriteMovie
-        {
-            FavoriteMovieId = movie.Id ?? 0,
-            Title = movie.Title,
-            Overview = movie.Overview,
-            ReleaseDate = movie.Release_date,
-            ImageUrl = movie.Poster_path
-        };
+        var topFavorites = await _repository.GetTopFavorites();
         
-           await _repository.AddFavoriteMovie(favoritesDto.UserId, favoriteMovie);
+        var movieIds = topFavorites.Select(fm => fm.FavoriteMovieId);
+        var favoriteMovieIds = await GetFavorites(userId, movieIds);
+        
+        return ToMovieDto(topFavorites, favoriteMovieIds);
     }
 
-    private static MoviesResponseDto ToMovieDto(IEnumerable<FavoriteMovie> favoriteMovies)
+    private static MoviesResponseDto ToMovieDto(IEnumerable<FavoriteMovie> favoriteMovies, IReadOnlySet<int> favoriteIds)
     {
-        return new MoviesResponseDto { Results = favoriteMovies.Select(ToMovieDto).ToList() };
+        return new MoviesResponseDto
+        {
+            Results = favoriteMovies.Select(fm => new MovieDto
+            {
+                MovieId = fm.FavoriteMovieId,
+                Title = fm.Title,
+                Description = fm.Overview,
+                ReleaseDate = fm.ReleaseDate,
+                PosterPath = fm.ImageUrl,
+                IsFavorite = favoriteIds.Contains(fm.FavoriteMovieId)
+            }).ToList()
+        };
+    }
+
+    private async Task<IReadOnlySet<int>> GetFavorites(string? userId, IEnumerable<int> movieIds)
+    {
+        return userId == null ? new HashSet<int>() : await _repository.GetFavorites(userId, movieIds);
     }
     
+    public async Task AddMovieToFavorite(FavoritesDto favoritesDto)
+    {   
+        var existingFavorite = await _repository.GetFavorite(favoritesDto.MovieId);
+        if (existingFavorite != null)
+        {
+            await _repository.AddFavorite(favoritesDto.UserId, existingFavorite);
+        }
+        else
+        {
+            var movie = await GetMovieAsync(favoritesDto.MovieId);
+            var favoriteMovie = new FavoriteMovie
+            {
+                FavoriteMovieId = movie.Id,
+                Title = movie.Title,
+                Overview = movie.Overview,
+                ReleaseDate = movie.Release_date,
+                ImageUrl = movie.Poster_path
+            };
+        
+            await _repository.AddFavorite(favoritesDto.UserId, favoriteMovie);
+        }
+    }
+
     public async Task<Rating> GetMovieRatingAsync(int movieId)
     {
         return await _repository.GetMovieRatingAsync(movieId);
@@ -166,18 +201,5 @@ public class MovieService : IMovieService
            Votes = (int?) rating.Votes
        };
        return newRating;
-    }
-    
-
-    private static MovieDto ToMovieDto(FavoriteMovie favoriteMovie)
-    {
-        return new MovieDto
-        {
-            MovieId = favoriteMovie.FavoriteMovieId,
-            Title = favoriteMovie.Title,
-            Description = favoriteMovie.Overview,
-            ReleaseDate = favoriteMovie.ReleaseDate,
-            PosterPath = favoriteMovie.ImageUrl
-        };
     }
 }

@@ -53,7 +53,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         /// </remarks>
         /// <returns>Returns a list of movies</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MoviesResponseDto>> GetMoviesByTitle([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string title);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MoviesResponseDto>> GetMoviesByTitle([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string title, [Microsoft.AspNetCore.Mvc.FromQuery] string userId);
 
         /// <returns>Return a list of favorite movies for a specific user</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies/favorites")]
@@ -65,7 +65,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
 
         /// <returns>Return a list of top favorite movies</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies/top-favorites")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MoviesResponseDto>> GetTopFavoriteMovies();
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MoviesResponseDto>> GetTopFavoriteMovies([Microsoft.AspNetCore.Mvc.FromQuery] string userId);
 
         /// <returns>Return the rating of a movie</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movie/rating/{movie_id}")]
@@ -102,8 +102,8 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         [Newtonsoft.Json.JsonProperty("homepage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Homepage { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        public int Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("imdb_id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Imdb_id { get; set; }
@@ -390,9 +390,6 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         [Newtonsoft.Json.JsonProperty("Description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Description { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("FavoriteCount", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? FavoriteCount { get; set; }
-
         [Newtonsoft.Json.JsonProperty("Title", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Title { get; set; }
 
@@ -401,6 +398,9 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
 
         [Newtonsoft.Json.JsonProperty("ReleaseDate", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ReleaseDate { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("IsFavorite", Required = Newtonsoft.Json.Required.Always)]
+        public bool IsFavorite { get; set; }
 
         public string ToJson()
         {

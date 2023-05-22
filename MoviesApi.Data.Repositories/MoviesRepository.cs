@@ -13,7 +13,7 @@ public class MoviesRepository : IMoviesRepository
         _context = context;
     }
 
-    public async Task<ICollection<FavoriteMovie>> GetFavoritesMovies(string userId)
+    public async Task<ICollection<FavoriteMovie>> GetFavorites(string userId)
     {
         return await _context.Favorites
             .Where(x => x.UserId == userId)
@@ -21,7 +21,16 @@ public class MoviesRepository : IMoviesRepository
             .ToListAsync();
     }
 
-    public async Task<ICollection<FavoriteMovie>> GetTopFavoritesMovies()
+    public async Task<IReadOnlySet<int>> GetFavorites(string userId, IEnumerable<int> movieIds)
+    {
+        var favorites = await _context.Favorites
+            .Where(x => x.UserId == userId && movieIds.Contains(x.FavoriteMovieId))
+            .Select(x => x.FavoriteMovieId)
+            .ToListAsync();
+        return favorites.ToHashSet();
+    }
+
+    public async Task<ICollection<FavoriteMovie>> GetTopFavorites()
     {
         var result = await _context.Favorites
             .GroupBy(favorites => favorites.FavoriteMovieId)
@@ -33,15 +42,18 @@ public class MoviesRepository : IMoviesRepository
         return result.Select(x => x.Movie).ToList();
     }
 
-    public async Task AddFavoriteMovie(string userId, FavoriteMovie favoriteMovie)
+    public async Task<FavoriteMovie?> GetFavorite(int movieId)
     {
-        var existingMovie = await _context.FavoriteMovies
-            .FirstOrDefaultAsync(fm => fm.FavoriteMovieId == favoriteMovie.FavoriteMovieId);
-        
+        return await _context.FavoriteMovies
+            .FirstOrDefaultAsync(fm => fm.FavoriteMovieId == movieId);  
+    }
+    
+    public async Task AddFavorite(string userId, FavoriteMovie favoriteMovie)
+    {
         await _context.Favorites.AddAsync(new Favorites
         {
             UserId = userId,
-            FavoriteMovie = existingMovie ?? favoriteMovie
+            FavoriteMovie = favoriteMovie
         });
         
         await _context.SaveChangesAsync();

@@ -22,12 +22,12 @@ public class MoviesController : MoviesControllerBase
             return Ok(result);
         });
     }
-    
-    public override async Task<ActionResult<MoviesResponseDto>> GetMoviesByTitle([BindRequired] string title)
-    {
-        return await _movieService.GetMoviesByTitleAsync(title);
-    }
 
+    public override async Task<ActionResult<MoviesResponseDto>> GetMoviesByTitle(string title, string userId)
+    {
+        return await _movieService.GetMoviesByTitleAsync(userId, title);
+    }
+    
     public override async Task<ActionResult<MoviesResponseDto>> GetFavoriteMovies(string userId)
     {
         return await _movieService.GetFavoriteMovies(userId);
@@ -39,9 +39,9 @@ public class MoviesController : MoviesControllerBase
        return Ok();
     }
 
-    public override async Task<ActionResult<MoviesResponseDto>> GetTopFavoriteMovies()
+    public override async Task<ActionResult<MoviesResponseDto>> GetTopFavoriteMovies(string userId)
     {
-        return await _movieService.GetTopFavoriteMovies();
+        return await _movieService.GetTopFavoriteMovies(userId);    
     }
 
     public override Task<ActionResult<RatingDto>> GetMovieRating(int movieId)

@@ -160,7 +160,9 @@ definitions:
         type: number
       vote_count:
         type: integer
-
+    required:
+      - id
+  
   Genre:
     type: object
     properties:
@@ -258,3 +260,5 @@ definitions:
             type: number
         vote_count:
             type: integer
+    required:
+      - id
