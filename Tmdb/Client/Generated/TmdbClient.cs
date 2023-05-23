@@ -44,7 +44,7 @@ namespace tmdb_api
         /// <param name="year">Year of the movie</param>
         /// <returns>Returns list of movies</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<MoviesResponse> GetMoviesByTitleAsync(string api_key, string query, bool? include_adult = null, string language = null, string primary_release_year = null, int? page = null, string year = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<MoviesResponseTmdb> GetMoviesByTitleAsync(string api_key, string query, bool? include_adult = null, string language = null, string primary_release_year = null, int? page = null, string year = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -190,7 +190,7 @@ namespace tmdb_api
         /// <param name="year">Year of the movie</param>
         /// <returns>Returns list of movies</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<MoviesResponse> GetMoviesByTitleAsync(string api_key, string query, bool? include_adult = null, string language = null, string primary_release_year = null, int? page = null, string year = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<MoviesResponseTmdb> GetMoviesByTitleAsync(string api_key, string query, bool? include_adult = null, string language = null, string primary_release_year = null, int? page = null, string year = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (api_key == null)
                 throw new System.ArgumentNullException("api_key");
@@ -256,7 +256,7 @@ namespace tmdb_api
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<MoviesResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<MoviesResponseTmdb>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -419,8 +419,8 @@ namespace tmdb_api
         [Newtonsoft.Json.JsonProperty("homepage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Homepage { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        public int Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("imdb_id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Imdb_id { get; set; }
@@ -549,13 +549,13 @@ namespace tmdb_api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MoviesResponse
+    public partial class MoviesResponseTmdb
     {
         [Newtonsoft.Json.JsonProperty("page", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? Page { get; set; }
 
         [Newtonsoft.Json.JsonProperty("results", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<MovieByTitleResponse> Results { get; set; }
+        public System.Collections.Generic.ICollection<MovieByTitleTmdb> Results { get; set; }
 
         [Newtonsoft.Json.JsonProperty("total_pages", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? Total_pages { get; set; }
@@ -566,7 +566,7 @@ namespace tmdb_api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MovieByTitleResponse
+    public partial class MovieByTitleTmdb
     {
         [Newtonsoft.Json.JsonProperty("adult", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool? Adult { get; set; }
@@ -577,8 +577,8 @@ namespace tmdb_api
         [Newtonsoft.Json.JsonProperty("genre_ids", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<int> Genre_ids { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        public int Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("original_language", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Original_language { get; set; }

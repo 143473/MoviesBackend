@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MoviesApi.Data;
+using MoviesApi.Data.Repositories;
+using MoviesApi.Data.Repositories.Interfaces;
 using MoviesApi.Services;
 using MoviesApi.Services.Interfaces;
 using tmdb_api;
@@ -17,22 +17,14 @@ builder.Services.AddScoped<IMoviesClient>( _ => new MoviesClient(){BaseUrl = bui
 builder.Services.AddScoped<IMovieService, MovieService>();
 
 //Repositories
+builder.Services.AddScoped<IMoviesRepository, MoviesRepository>();
 
-//Identity framework
-var connectionString = builder.Configuration.GetConnectionString("IdentityDb");
-builder.Services.AddDbContext<MoviesContext>(opt => opt.UseSqlServer(connectionString));
-
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<MoviesContext>();
-
-// NOT WORKING in cloud 
-builder.Services.AddDataProtection()
-    .SetApplicationName("MoviesApp")
-    .PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"));
-
-builder.Services.ConfigureApplicationCookie(options =>
+// EF
+var connectionString = builder.Configuration.GetConnectionString("MoviesDb");
+builder.Services.AddDbContext<IMoviesContext, MoviesContext>(opt =>
 {
-    options.Cookie.Name = ".Yummy";
+    opt.UseSqlServer(connectionString);
+    opt.EnableSensitiveDataLogging();
 });
 
 // Add services to the container.

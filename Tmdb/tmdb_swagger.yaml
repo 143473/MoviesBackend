@@ -90,7 +90,7 @@ paths:
         200:
           description: Returns list of movies
           schema:
-            $ref: "#/definitions/MoviesResponse"
+            $ref: "#/definitions/MoviesResponseTmdb"
         401:
           description: Unauthorized
         404:
@@ -160,7 +160,9 @@ definitions:
         type: number
       vote_count:
         type: integer
-
+    required:
+      - id
+  
   Genre:
     type: object
     properties:
@@ -211,7 +213,7 @@ definitions:
       backdrop_path:
         type: string
         
-  MoviesResponse:
+  MoviesResponseTmdb:
     type: object
     properties:
       page:
@@ -219,13 +221,13 @@ definitions:
       results:
         type: array
         items:
-          $ref: "#/definitions/MovieByTitleResponse"
+          $ref: "#/definitions/MovieByTitleTmdb"
       total_pages:
         type: integer
       total_results:
         type: integer
         
-  MovieByTitleResponse:
+  MovieByTitleTmdb:
     type: object
     properties: 
         adult:
@@ -258,3 +260,5 @@ definitions:
             type: number
         vote_count:
             type: integer
+    required:
+      - id
