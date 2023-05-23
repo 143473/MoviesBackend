@@ -59,6 +59,22 @@ public class MoviesRepository : IMoviesRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task RemoveFavorite(string userId, int movieId)
+    {
+        Favorites toRemove;
+        try
+        {
+          toRemove =  await _context.Favorites
+             .FirstAsync(x => x.UserId == userId && x.FavoriteMovieId == movieId);
+        }
+        catch (InvalidOperationException)
+        {
+           return;
+        }
+        _context.Remove(toRemove);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<Rating> GetMovieRatingAsync(int movieId)
     {
         Rating rating = new Rating

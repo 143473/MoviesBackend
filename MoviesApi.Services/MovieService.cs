@@ -93,7 +93,7 @@ public class MovieService : IMovieService
         return userId == null ? new HashSet<int>() : await _repository.GetFavorites(userId, movieIds);
     }
     
-    public async Task AddMovieToFavorite(FavoritesDto favoritesDto)
+    public async Task AddFavorite(FavoritesDto favoritesDto)
     {   
         var existingFavorite = await _repository.GetFavorite(favoritesDto.MovieId);
         if (existingFavorite != null)
@@ -114,6 +114,10 @@ public class MovieService : IMovieService
         
             await _repository.AddFavorite(favoritesDto.UserId, favoriteMovie);
         }
+    }
+    public async Task RemoveFavorite(FavoritesDto favoritesDto)
+    {
+        await _repository.RemoveFavorite(favoritesDto.UserId, favoritesDto.MovieId);
     }
 
     public async Task<Rating> GetMovieRatingAsync(int movieId)

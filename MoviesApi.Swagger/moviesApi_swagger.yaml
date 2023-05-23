@@ -93,6 +93,19 @@ paths:
         404:
           description: Movie not found
   '/movies/favorites':
+    post:
+      tags:
+        - movies
+      operationId: AddFavoriteMovie
+      parameters:
+        - name: favoritesDto
+          in: body
+          schema:
+            $ref: "#/definitions/FavoritesDto"
+          required: true
+      responses:
+        200:
+          description: Favorite movie created
     get:
       tags:
         - movies
@@ -107,19 +120,20 @@ paths:
           description: Return a list of favorite movies for a specific user
           schema:
             $ref: "#/definitions/MoviesResponseDto"
-    post:
-      tags:
-        - movies
-      operationId: CreateFavoriteMovie
-      parameters:
-        - name: favoritesDto
-          in: body
-          schema:
-            $ref: "#/definitions/FavoritesDto"
-          required: true
-      responses:
-        200:
-          description: Favorite movie created
+    delete: 
+        tags:
+            - movies
+        operationId: DeleteFavoriteMovie
+        parameters:
+          - name: favoritesDto
+            in: body
+            schema:
+              $ref: "#/definitions/FavoritesDto"
+            required: true
+        responses:
+          200:
+            description: Favorite movie deleted
+            
   '/movies/top-favorites':
     get:
       tags:
