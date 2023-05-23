@@ -73,7 +73,7 @@ public class MoviesController : MoviesControllerBase
         return Task.Run<IActionResult>(async () =>
         {
             var result = await _movieService.AddRatingAsync(ratedMovie);
-            return Created($"ratedMovie/{ratedMovie.RatedMovieId}", ratedMovie);
+            return Created($"ratedMovie/{ratedMovie.RatedMovieId}", result);
         });
     }
 }
