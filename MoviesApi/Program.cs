@@ -10,11 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // External services
 builder.Services.AddScoped<IMoviesClient>( _ => new MoviesClient(){BaseUrl = builder.Configuration.GetConnectionString("tmdb")});
+builder.Services.AddScoped<IPersonsClient>( _ => new PersonsClient(){BaseUrl = builder.Configuration.GetConnectionString("tmdb")});
 
 // Internal
 
 // Services
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 
 //Repositories
 builder.Services.AddScoped<IMoviesRepository, MoviesRepository>();
