@@ -149,7 +149,7 @@ paths:
           description: Return a list of top favorite movies
           schema:
             $ref: "#/definitions/MoviesResponseDto"
-  '/movie/rating/{movie_id}':
+  '/movie/rating/{movieId}':
     get:
       tags:
         - movies
