@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using MoviesApi.Data.Models;
+﻿using MoviesApi.Data.Models;
 using MoviesDB.API.Swagger.Controllers.Generated;
 using tmdb_api;
 
@@ -67,6 +66,46 @@ public static class MoviesDtoMapper
             Runtime = movie.Runtime,
             Tagline = movie.Tagline,
             Status = movie.Status
+        };
+    }
+
+    public static MovieCreditsResponseDto ToMovieCreditsDto(this MovieCreditsResponseTmdb credits)
+    {
+        return new MovieCreditsResponseDto()
+        {
+            Id = credits.Id,
+            Cast = credits.Cast.Select(c => new MovieCastDto()
+            {
+                Adult = c.Adult,
+                Cast_id = c.Cast_id,
+                Character = c.Character,
+                Credit_id = c.Credit_id,
+                Gender = c.Gender,
+                Id = c.Id,
+                Known_for_department = c.Known_for_department,
+                Name = c.Name,
+                Order = c.Order,
+                Original_name = c.Original_name,
+                Popularity = c.Popularity,
+                Profile_path = !string.IsNullOrEmpty(c.Profile_path)
+                    ? $"https://image.tmdb.org/t/p/w500{c.Profile_path}"
+                    : null
+            }).ToList(),
+            Crew = credits.Crew.Select(c => new MovieCrewDto()
+            {
+                Adult = c.Adult,
+                Credit_id = c.Credit_id,
+                Gender = c.Gender,
+                Id = c.Id,
+                Job = c.Job,
+                Known_for_department = c.Known_for_department,
+                Name = c.Name,
+                Original_name = c.Original_name,
+                Popularity = c.Popularity,
+                Profile_path = !string.IsNullOrEmpty(c.Profile_path)
+                    ? $"https://image.tmdb.org/t/p/w500{c.Profile_path}"
+                    : null
+            }).ToList()
         };
     }
 }

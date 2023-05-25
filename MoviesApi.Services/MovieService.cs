@@ -103,6 +103,12 @@ public class MovieService : IMovieService
         return DTOMapper.GetExtendedMoviesResponseDTO(response);
     }
 
+    public async Task<MovieCreditsResponseDto> GetMovieCreditsAsync(int movieId)
+    {
+        var movieCreditsResponse = await _moviesClient.GetMovieCreditsAsync(api_key, movieId, "en-US");
+        return movieCreditsResponse.ToMovieCreditsDto();
+    }
+
     public async Task<Rating> GetMovieRatingAsync(int movieId)
     {
         return await _repository.GetMovieRatingAsync(movieId);

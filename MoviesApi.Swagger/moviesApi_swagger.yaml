@@ -298,7 +298,106 @@ paths:
           description: Unauthorized
         404:
           description: Person not found
+          
+  '/movie/{movieId}/credits':
+    get:
+      tags:
+        - movies
+      operationId: GetMovieCredits
+      description: Get a movie's credits by its Id
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: movieId
+          in: path
+          type: integer
+          required: true
+          description: movie id
+        - name: language
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns credits for a movie
+          schema:
+            $ref: "#/definitions/MovieCreditsResponseDto"
+        401:
+          description: Unauthorized
+        404:
+          description: Credits not found
+          
 definitions:
+  MovieCreditsResponseDto:
+    type: object
+    properties:
+      cast:
+        type: array
+        items:
+          $ref: '#/definitions/MovieCastDto'
+      crew:
+        type: array
+        items:
+          $ref: '#/definitions/MovieCrewDto'
+      id:
+        type: integer
+  
+  MovieCastDto:
+    type: object
+    properties:
+      adult:
+        type: boolean
+      gender:
+        type: integer
+      id:
+        type: integer
+      known_for_department:
+        type: string
+      name:
+        type: string
+      original_name:
+        type: string
+      popularity:
+        type: number
+      profile_path:
+        type: string
+      cast_id:
+        type: integer
+      character:
+        type: string
+      credit_id:
+        type: string
+      order:
+        type: integer
+  
+  MovieCrewDto:
+    type: object
+    properties:
+      adult:
+        type: boolean
+      gender:
+        type: integer
+      id:
+        type: integer
+      known_for_department:
+        type: string
+      name:
+        type: string
+      original_name:
+        type: string
+      popularity:
+        type: number
+      profile_path:
+        type: string
+      credit_id:
+        type: string
+      department:
+        type: string
+      job:
+        type: string
+  
   MovieResponseDto:
     type: object
     properties:

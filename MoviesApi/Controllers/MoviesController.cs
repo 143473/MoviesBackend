@@ -85,4 +85,13 @@ public class MoviesController : MoviesControllerBase
             return Created($"ratedMovie/{ratedMovie.RatedMovieId}", result);
         });
     }
+
+    public override Task<ActionResult<MovieCreditsResponseDto>> GetMovieCredits(string api_key, int movieId, string language)
+    {
+        return Task.Run<ActionResult<MovieCreditsResponseDto>>(async () =>
+        {
+            var result = await _movieService.GetMovieCreditsAsync(movieId);
+            return Ok(result);
+        });
+    }
 }
