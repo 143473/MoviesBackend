@@ -13,17 +13,16 @@ public class MoviesController : MoviesControllerBase
     {
         _movieService = movieService;
     }
-
-    public override Task<ActionResult<MovieResponse>> GetMovie([BindRequired] int movie_id)
+    public override Task<ActionResult<MovieResponseDto>> GetMovie(string userId, int movie_id)
     {
-        return Task.Run<ActionResult<MovieResponse>>(async () =>
+        return Task.Run<ActionResult<MovieResponseDto>>(async () =>
         {
-            var result = await _movieService.GetMovieAsync(movie_id);
+            var result = await _movieService.GetMovieAsync(userId, movie_id);
             return Ok(result);
         });
     }
 
-    public override async Task<ActionResult<MoviesResponseDto>> GetMoviesByTitle(string title, string userId)
+    public override async Task<ActionResult<MovieListDto>> GetMoviesByTitle(string title, string userId)
     {
         return await _movieService.GetMoviesByTitleAsync(userId, title);
     }
@@ -34,7 +33,7 @@ public class MoviesController : MoviesControllerBase
         return Ok();
     }
     
-    public override async Task<ActionResult<MoviesResponseDto>> GetFavoriteMovies(string userId)
+    public override async Task<ActionResult<MovieListDto>> GetFavoriteMovies(string userId)
     {
         return await _movieService.GetFavoriteMovies(userId);
     }
@@ -45,9 +44,9 @@ public class MoviesController : MoviesControllerBase
         return Ok();
     }
     
-    public override async Task<ActionResult<MoviesResponseDto>> GetTopFavoriteMovies(string userId)
+    public override async Task<ActionResult<MovieListDto>> GetTopFavoriteMovies(string userId)
     {
-        return await _movieService.GetTopFavoriteMovies(userId);    
+        return await _movieService.GetTopFavorites(userId);    
     }
 
     public override Task<ActionResult<RatingDto>> GetMovieRating(int movieId)

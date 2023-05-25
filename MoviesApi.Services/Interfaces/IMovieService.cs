@@ -6,10 +6,10 @@ namespace MoviesApi.Services.Interfaces;
 
 public interface IMovieService
 {
-    Task<MovieResponse> GetMovieAsync(int movie_id, string language = "en_US");
-    Task<MoviesResponseDto> GetMoviesByTitleAsync(string? userId, string movieName, string language = "en_US");
-    Task<MoviesResponseDto> GetFavoriteMovies(string userId);
-    Task<MoviesResponseDto> GetTopFavoriteMovies(string? userId);
+    Task<MovieResponseDto> GetMovieAsync(string userId, int movie_id, string language = "en_US");
+    Task<MovieListDto> GetMoviesByTitleAsync(string? userId, string movieName, string language = "en_US");
+    Task<MovieListDto> GetFavoriteMovies(string userId);
+    Task<MovieListDto> GetTopFavorites(string? userId);
     Task AddFavorite(FavoritesDto favoritesDto);
     Task<Rating> GetMovieRatingAsync(int movieId);
     Task<RatedMovieDto> AddRatedMovieAsync(RatedMovieDto ratedMovie);

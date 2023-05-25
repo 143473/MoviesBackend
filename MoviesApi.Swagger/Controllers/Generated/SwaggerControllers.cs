@@ -46,14 +46,14 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         /// </remarks>
         /// <returns>Returns a movie</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movie/{movie_id}")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MovieResponse>> GetMovie([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] int movie_id);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MovieResponseDto>> GetMovie([Microsoft.AspNetCore.Mvc.FromQuery] string userId, [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] int movie_id);
 
         /// <remarks>
         /// Get a list of movies by title
         /// </remarks>
         /// <returns>Returns a list of movies</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MoviesResponseDto>> GetMoviesByTitle([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string title, [Microsoft.AspNetCore.Mvc.FromQuery] string userId);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MovieListDto>> GetMoviesByTitle([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string title, [Microsoft.AspNetCore.Mvc.FromQuery] string userId);
 
         /// <returns>Favorite movie created</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("movies/favorites")]
@@ -61,7 +61,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
 
         /// <returns>Return a list of favorite movies for a specific user</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies/favorites")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MoviesResponseDto>> GetFavoriteMovies([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string userId);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MovieListDto>> GetFavoriteMovies([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string userId);
 
         /// <returns>Favorite movie deleted</returns>
         [Microsoft.AspNetCore.Mvc.HttpDelete, Microsoft.AspNetCore.Mvc.Route("movies/favorites")]
@@ -69,7 +69,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
 
         /// <returns>Return a list of top favorite movies</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies/top-favorites")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MoviesResponseDto>> GetTopFavoriteMovies([Microsoft.AspNetCore.Mvc.FromQuery] string userId);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MovieListDto>> GetTopFavoriteMovies([Microsoft.AspNetCore.Mvc.FromQuery] string userId);
 
         /// <returns>Return the rating of a movie</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movie/rating/{movieId}")]
@@ -116,7 +116,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MovieResponse
+    public partial class MovieResponseDto
     {
         [Newtonsoft.Json.JsonProperty("adult", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool? Adult { get; set; }
@@ -193,16 +193,19 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         [Newtonsoft.Json.JsonProperty("vote_count", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? Vote_count { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("isFavorite", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool? IsFavorite { get; set; }
+
         public string ToJson()
         {
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static MovieResponse FromJson(string data)
+        public static MovieResponseDto FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<MovieResponse>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<MovieResponseDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
@@ -395,7 +398,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MoviesResponseDto
+    public partial class MovieListDto
     {
         [Newtonsoft.Json.JsonProperty("Results", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.List<MovieDto> Results { get; set; }
@@ -406,10 +409,10 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static MoviesResponseDto FromJson(string data)
+        public static MovieListDto FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<MoviesResponseDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<MovieListDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 

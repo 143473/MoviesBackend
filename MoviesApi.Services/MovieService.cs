@@ -3,8 +3,8 @@ using MoviesApi.Data.Models;
 using MoviesApi.Data.Repositories.Interfaces;
 using MoviesApi.Services.Interfaces;
 using MoviesDB.API.Swagger.Controllers.Generated;
+using MoviesApi.Services.Helpers;
 using tmdb_api;
-using MovieResponse = tmdb_api.MovieResponse;
 
 namespace MoviesApi.Services;
 
@@ -21,74 +21,41 @@ public class MovieService : IMovieService
         api_key = configuration.GetSection("TMDB")["APIKey"];
     }
 
-    public async Task<MovieResponse> GetMovieAsync(int movie_id, string language = "en_US")
+    public async Task<MovieResponseDto> GetMovieAsync(string userId, int movie_id, string language = "en_US")
     {
         var movieResponse = await _moviesClient.GetMovieAsync(movie_id, api_key, language);
-        movieResponse.Poster_path = !string.IsNullOrEmpty(movieResponse.Poster_path)
-            ? $"https://image.tmdb.org/t/p/w500{movieResponse.Poster_path}"
-            : null;
-        return movieResponse;
+        var favorites = await GetFavoriteIds(userId, new[] {movie_id});
+        return movieResponse.ToMovieResponseDto(favorites);
     }
 
-    public async Task<MoviesResponseDto> GetMoviesByTitleAsync(string? userId, string movieName,
+    public async Task<MovieListDto> GetMoviesByTitleAsync(string? userId, string movieName,
         string language = "en_US")
     {
         var moviesResponse = await _moviesClient.GetMoviesByTitleAsync(api_key,movieName, null, language);
         var movieIds = moviesResponse.Results.Select(r => r.Id);
-        var favoriteMovieIds = await GetFavorites(userId, movieIds);
-        
-        return new MoviesResponseDto
-        {
-            Results = moviesResponse.Results
-                .Select(r => new MovieDto
-                {
-                    MovieId = r.Id,
-                    Title = r.Title,
-                    Description = r.Overview,
-                    ReleaseDate = r.Release_date,
-                    PosterPath = !string.IsNullOrEmpty(r.Poster_path)
-                        ? $"https://image.tmdb.org/t/p/w500{r.Poster_path}"
-                        : null,
-                    IsFavorite = favoriteMovieIds.Contains(r.Id)
-                })
-                .ToList()
-        };
+        var favoriteMovieIds = await GetFavoriteIds(userId, movieIds);
+        return moviesResponse.ToMovieDto(favoriteMovieIds);
     }
     
-    public async Task<MoviesResponseDto> GetFavoriteMovies(string userId)
+    public async Task<MovieListDto> GetFavoriteMovies(string userId)
     {
         var favorites = await _repository.GetFavorites(userId);
         var favoriteIds = favorites.Select(f => f.FavoriteMovieId).ToHashSet();
-        return ToMovieDto(favorites, favoriteIds);
+        return favorites.ToMovieDto(favoriteIds);
     }
     
-    public async Task<MoviesResponseDto> GetTopFavoriteMovies(string? userId)
+    public async Task<MovieListDto> GetTopFavorites(string? userId)
     {
         var topFavorites = await _repository.GetTopFavorites();
         
         var movieIds = topFavorites.Select(fm => fm.FavoriteMovieId);
-        var favoriteMovieIds = await GetFavorites(userId, movieIds);
+        var favoritesIds = await GetFavoriteIds(userId, movieIds);
         
-        return ToMovieDto(topFavorites, favoriteMovieIds);
+        return topFavorites.ToMovieDto(favoritesIds);
     }
+    
 
-    private static MoviesResponseDto ToMovieDto(IEnumerable<FavoriteMovie> favoriteMovies, IReadOnlySet<int> favoriteIds)
-    {
-        return new MoviesResponseDto
-        {
-            Results = favoriteMovies.Select(fm => new MovieDto
-            {
-                MovieId = fm.FavoriteMovieId,
-                Title = fm.Title,
-                Description = fm.Overview,
-                ReleaseDate = fm.ReleaseDate,
-                PosterPath = fm.ImageUrl,
-                IsFavorite = favoriteIds.Contains(fm.FavoriteMovieId)
-            }).ToList()
-        };
-    }
-
-    private async Task<IReadOnlySet<int>> GetFavorites(string? userId, IEnumerable<int> movieIds)
+    private async Task<IReadOnlySet<int>> GetFavoriteIds(string? userId, IEnumerable<int> movieIds)
     {
         return userId == null ? new HashSet<int>() : await _repository.GetFavorites(userId, movieIds);
     }
@@ -102,7 +69,7 @@ public class MovieService : IMovieService
         }
         else
         {
-            var movie = await GetMovieAsync(favoritesDto.MovieId);
+            var movie = await GetMovieAsync(favoritesDto.UserId, favoritesDto.MovieId);
             var favoriteMovie = new FavoriteMovie
             {
                 FavoriteMovieId = movie.Id,
