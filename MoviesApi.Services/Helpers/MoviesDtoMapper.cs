@@ -65,7 +65,8 @@ public static class MoviesDtoMapper
             Revenue = movie.Revenue,
             Original_language = movie.Original_language,
             Runtime = movie.Runtime,
-            Tagline = movie.Tagline
+            Tagline = movie.Tagline,
+            Status = movie.Status
         };
     }
 }
