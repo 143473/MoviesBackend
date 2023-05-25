@@ -149,7 +149,7 @@ paths:
           description: Return a list of top favorite movies
           schema:
             $ref: "#/definitions/MoviesResponseDto"
-  '/movie/rating/{movie_id}':
+  '/movie/rating/{movieId}':
     get:
       tags:
         - movies
@@ -200,6 +200,71 @@ paths:
           description: Created
         400:
           description: Bad Request
+  '/person/{personId}':
+    get:
+      tags:
+        - persons
+      operationId: GetPerson
+      description: Get a person's details by its Id
+      parameters:
+        - name: personId
+          in: path
+          type: integer
+          required: true
+          description: person id
+      responses:
+        200:
+          description: Returns list of persons
+          schema:
+            $ref: "#/definitions/PersonDetailsDTO"
+        401:
+          description: Unauthorized
+        404:
+          description: Person not found
+
+  '/person/{personId}/movies':
+    get:
+      tags:
+        - persons
+      operationId: GetPersonMovies
+      description: Get a person's movies by its Id
+      parameters:
+        - name: personId
+          in: path
+          type: integer
+          required: true
+          description: person id
+      responses:
+        200:
+          description: Returns list of persons
+          schema:
+            $ref: "#/definitions/PersonMovieCreditsDTO"
+        401:
+          description: Unauthorized
+        404:
+          description: Person not found
+          
+  '/search/person':
+    get:
+      tags:
+        - persons
+      operationId: GetPersonsByName
+      description: Get persons by name
+      parameters:
+        - name: query
+          in: query
+          type: string
+          required: true
+          description: name of the person, or part of their name
+      responses:
+        200:
+          description: Returns list of persons
+          schema:
+            $ref: "#/definitions/PersonsResponseDTO"
+        401:
+          description: Unauthorized
+        404:
+          description: Person not found
 definitions:
   MovieResponse:
     type: object
@@ -386,3 +451,105 @@ definitions:
         type: string
       rating:
         type: number
+  PersonsResponseDTO:
+    type: object
+    properties: 
+      persons:
+        type: array
+        items:
+          $ref: '#/definitions/PersonDTO'
+  PersonDTO:
+    type: object
+    properties:
+      adult:
+        type: boolean
+      gender:
+        type: string
+      id:
+        type: integer
+      known_for_department:
+        type: string
+      name:
+        type: string
+      original_name:
+        type: string
+      popularity:
+        type: number
+      profile_path:
+        type: string
+      known_for:
+        type: array
+        items:
+          $ref: '#/definitions/MovieDto'
+          
+  PersonDetailsDTO:
+    type: object
+    properties:
+      biography:
+        type: string
+      birthday:
+        type: string
+      deathday:
+        type: string
+      gender:
+        type: string
+      homepage:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      place_of_birth:
+        type: string
+      popularity:
+        type: number
+      profile_path:
+        type: string
+        
+  PersonMovieCreditsDTO:
+    type: object
+    properties:
+      cast:
+        type: array
+        items:
+          $ref: '#/definitions/PersonMovieDTO'
+      crew:
+        type: array
+        items:
+          $ref: '#/definitions/PersonMovieDTO'
+      id:
+        type: integer
+  
+  PersonMovieDTO:
+    type: object
+    properties:
+      id:
+        type: integer
+      original_language:
+        type: string
+      original_title:
+        type: string
+      overview:
+        type: string
+      popularity:
+        type: number
+      poster_path:
+        type: string
+      release_date:
+        type: string
+      title:
+        type: string
+      vote_average:
+        type: number
+      vote_count:
+        type: integer
+      character:
+        type: string
+      credit_id:
+        type: string
+      order:
+        type: string
+      department:
+        type: string
+      job:
+        type: string

@@ -44,6 +44,103 @@ paths:
         404:
           description: Movies not found
   
+  '/person/{person_id}':
+    get:
+      tags:
+        - persons
+      operationId: GetPerson
+      description: Get a person's details by its Id
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: person_id
+          in: path
+          type: integer
+          required: true
+          description: person id
+        - name: language
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns list of persons
+          schema:
+            $ref: "#/definitions/PersonDetailsTmdb"
+        401:
+          description: Unauthorized
+        404:
+          description: Person not found
+          
+  '/person/{person_id}/movie_credits':
+    get:
+      tags:
+        - persons
+      operationId: GetPersonMovies
+      description: Get a person's movies by its Id
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: person_id
+          in: path
+          type: integer
+          required: true
+          description: person id
+        - name: language
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns list of persons
+          schema:
+            $ref: "#/definitions/PersonMoviesResponseTmdb"
+        401:
+          description: Unauthorized
+        404:
+          description: Person not found
+        
+  '/search/person':
+    get:
+      tags:
+        - persons
+      operationId: GetPersonsByName
+      description: Get persons by name
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: query
+          in: query
+          type: string
+          required: true
+          description: name of the person, or part of their name
+        - name: include_adult
+          in: query
+          type: boolean
+        - name: language
+          in: query
+          type: string
+        - name: page
+          in: query
+          type: integer
+      responses:
+        200:
+          description: Returns list of persons
+          schema:
+            $ref: "#/definitions/PersonsResponseTmdb"
+        401:
+          description: Unauthorized
+        404:
+          description: Person not found
+        
+          
   '/search/movie':
     get:
       tags:
@@ -95,8 +192,139 @@ paths:
           description: Unauthorized
         404:
           description: Movies not found
+
         
 definitions:
+  PersonMoviesResponseTmdb:
+    type: object
+    properties: 
+      cast:
+        type: array
+        items:
+          $ref: '#/definitions/PersonMovie'
+      crew:
+        type: array
+        items:
+          $ref: '#/definitions/PersonMovie'
+      id:
+        type: integer
+  
+  PersonMovie:
+    type: object
+    properties:
+      adult:
+        type: boolean
+      backdrop_path:
+        type: string
+      genres:
+        type: array
+        items:
+          type: integer
+      id:
+        type: integer
+      original_language:
+        type: string
+      original_title:
+        type: string
+      overview:
+        type: string
+      popularity:
+        type: number
+      poster_path:
+        type: string
+      release_date:
+        type: string
+      title:
+        type: string
+      video:
+        type: boolean
+      vote_average:
+        type: number
+      vote_count:
+        type: integer
+      character:
+        type: string
+      credit_id:
+        type: string
+      order:
+        type: string
+      department: 
+        type: string
+      job:
+        type: string
+        
+  PersonDetailsTmdb:
+    type: object
+    properties:
+      adult:
+        type: boolean
+      also_known_as:
+        type: array
+        items:
+          type: string
+      biography:
+        type: string
+      birthday:
+        type: string
+      deathday:
+        type: string
+      gender:
+        type: integer
+      homepage:
+        type: string
+      id:
+        type: integer
+      imdb_id:
+        type: string
+      known_for_department:
+        type: string
+      name:
+        type: string
+      place_of_birth:
+        type: string
+      popularity:
+        type: number
+      profile_path:
+        type: string
+      
+  PersonsResponseTmdb:
+    type: object
+    properties: 
+      page:
+        type: integer
+      results:
+        type: array
+        items:
+          $ref: '#/definitions/PersonTmdb'
+      total_pages:
+        type: integer
+      total_results:
+        type: integer
+  
+  PersonTmdb:
+    type: object
+    properties: 
+      adult: 
+        type: boolean
+      gender:
+        type: integer
+      id:
+        type: integer
+      known_for_department:
+        type: string
+      name: 
+        type: string
+      original_name:
+        type: string
+      popularity:
+        type: number
+      profile_path:
+        type: string
+      known_for:
+        type: array
+        items:
+          $ref: '#/definitions/MovieResponse'
+        
   MovieResponse:
     type: object
     properties:
