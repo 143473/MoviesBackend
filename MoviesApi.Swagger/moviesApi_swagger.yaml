@@ -286,7 +286,7 @@ definitions:
       genres:
         type: array
         items:
-          $ref: "#/definitions/Genre"
+          $ref: "#/definitions/GenreDto"
       homepage:
          type: string
       id:
@@ -338,7 +338,7 @@ definitions:
     required:
       - id
 
-  Genre:
+  GenreDto:
     type: object
     properties:
       id:

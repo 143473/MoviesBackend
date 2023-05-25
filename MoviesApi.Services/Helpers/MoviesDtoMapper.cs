@@ -1,4 +1,5 @@
-﻿using MoviesApi.Data.Models;
+﻿using System.Net.Http.Headers;
+using MoviesApi.Data.Models;
 using MoviesDB.API.Swagger.Controllers.Generated;
 using tmdb_api;
 
@@ -21,7 +22,7 @@ public static class MoviesDtoMapper
             }).ToList()
         };
     }
-    
+
     public static MovieListDto ToMovieDto(this MoviesResponseTmdb movies, IReadOnlySet<int> movieIds)
     {
         return new MovieListDto()
@@ -51,10 +52,20 @@ public static class MoviesDtoMapper
             Poster_path = !string.IsNullOrEmpty(movie.Poster_path)
                 ? $"https://image.tmdb.org/t/p/w500{movie.Poster_path}"
                 : null,
-            Release_date = movie.Release_date, 
+            Release_date = movie.Release_date,
             Vote_average = movie.Vote_average,
             Vote_count = movie.Vote_count,
-            IsFavorite = favoriteIds.Contains(movie.Id)
+            IsFavorite = favoriteIds.Contains(movie.Id),
+            Genres = movie.Genres.Select(g => new GenreDto()
+            {
+                Id = g.Id,
+                Name = g.Name
+            }).ToList(),
+            Budget = movie.Budget,
+            Revenue = movie.Revenue,
+            Original_language = movie.Original_language,
+            Runtime = movie.Runtime,
+            Tagline = movie.Tagline
         };
     }
 }

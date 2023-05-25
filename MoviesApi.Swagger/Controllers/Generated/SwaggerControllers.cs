@@ -131,7 +131,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         public int? Budget { get; set; }
 
         [Newtonsoft.Json.JsonProperty("genres", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.List<Genre> Genres { get; set; }
+        public System.Collections.Generic.List<GenreDto> Genres { get; set; }
 
         [Newtonsoft.Json.JsonProperty("homepage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Homepage { get; set; }
@@ -212,7 +212,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class Genre
+    public partial class GenreDto
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? Id { get; set; }
@@ -226,10 +226,10 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static Genre FromJson(string data)
+        public static GenreDto FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Genre>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<GenreDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
