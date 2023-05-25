@@ -32,7 +32,7 @@ public static class DTOMapper
         return personsResponseDto;
     }
 
-    public static List<MovieDto> GetMovieDTOList(ICollection<MovieResponse> movieResponses)
+    public static List<MovieDto> GetMovieDTOList(ICollection<MovieResponse?> movieResponses)
     {
         List<MovieDto> movieDTOList = new List<MovieDto>();
         foreach (var movie in movieResponses)
@@ -42,18 +42,67 @@ public static class DTOMapper
 
         return movieDTOList;
     }
-    
-    public static MovieDto GetMovieDTO(MovieResponse movieResponse)
+
+    public static MoviesExtendedResponseDto GetExtendedMoviesResponseDTO(MoviesResponseTmdb moviesResponseTmdb)
     {
+        return new MoviesExtendedResponseDto()
+        {
+            Results = moviesResponseTmdb.Results
+                .Select(movie => GetMovieExtendedDTO(movie))
+                .ToList()
+        };
+    }
+
+    public static MovieExtendedDTO GetMovieExtendedDTO(MovieByTitleTmdb movieTmdb)
+    {
+        return new MovieExtendedDTO
+        {
+            Adult = movieTmdb.Adult,
+            Backdrop_path = !string.IsNullOrEmpty(movieTmdb.Backdrop_path)
+                ? $"https://image.tmdb.org/t/p/w500{movieTmdb.Backdrop_path}"
+                : null,
+            Id = movieTmdb.Id,
+            Original_language = movieTmdb.Original_language,
+            Original_title = movieTmdb.Original_title,
+            Overview = movieTmdb.Overview,
+            Popularity = movieTmdb.Popularity,
+            Poster_path = !string.IsNullOrEmpty(movieTmdb.Poster_path)
+                ? $"https://image.tmdb.org/t/p/w500{movieTmdb.Poster_path}"
+                : null,
+            Release_date = movieTmdb.Release_date,
+            Title = movieTmdb.Title,
+            Video = movieTmdb.Video,
+            Vote_average = movieTmdb.Vote_average,
+            Vote_count = movieTmdb.Vote_count
+        };
+        }
+
+    public static MovieDto GetMovieDTO(MovieResponse? movieResponse = null, MovieByTitleTmdb? movieByTitleTmdb = null)
+    {
+        if (movieResponse != null)
+        {
+            return new MovieDto
+            {
+                MovieId = movieResponse.Id,
+                Title = movieResponse.Title,
+                Description = movieResponse.Overview,
+                ReleaseDate = movieResponse.Release_date,
+                PosterPath = !string.IsNullOrEmpty(movieResponse.Poster_path)
+                    ? $"https://image.tmdb.org/t/p/w500{movieResponse.Poster_path}"
+                    : null
+            };
+        }
         return new MovieDto
         {
-            MovieId = movieResponse.Id,
-            Description = movieResponse.Overview,
-            ReleaseDate = movieResponse.Release_date,
-            PosterPath = !string.IsNullOrEmpty(movieResponse.Poster_path)
-                ? $"https://image.tmdb.org/t/p/w500{movieResponse.Poster_path}"
+            MovieId = movieByTitleTmdb.Id,
+            Title = movieByTitleTmdb.Title,
+            Description = movieByTitleTmdb.Overview,
+            ReleaseDate = movieByTitleTmdb.Release_date,
+            PosterPath = !string.IsNullOrEmpty(movieByTitleTmdb.Poster_path)
+                ? $"https://image.tmdb.org/t/p/w500{movieByTitleTmdb.Poster_path}"
                 : null
         };
+
     }
 
     public static PersonDetailsDTO GetPersonDetailsDto(PersonDetailsTmdb personDetailsTmdb)

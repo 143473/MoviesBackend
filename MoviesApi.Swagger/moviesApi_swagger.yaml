@@ -48,6 +48,35 @@ paths:
         400:
           description: Bad Request
 
+  '/movies/discover':
+    get:
+      tags:
+        - movies
+      operationId: GetFilteredMovies
+      description: Get a list of movies based on the applied filter
+      parameters:
+        - name: fromDate
+          in: query
+          type: string
+          format: date
+        - name: toDate
+          in: query
+          type: string
+          format: date
+        - name: sort_by
+          in: body
+          schema:
+            $ref: "#/definitions/SortBy"
+      responses:
+        200:
+          description: Returns a filtered list of movies
+          schema:
+            $ref: "#/definitions/MoviesExtendedResponseDto"
+        401:
+          description: Unauthorized
+        404:
+          description: Movies not found
+        
   '/movie/{movie_id}':
     get:
       tags:
@@ -429,6 +458,42 @@ definitions:
     required:
       - MovieId
       - IsFavorite
+  MoviesExtendedResponseDto:
+    type: object
+    properties:
+      Results:
+        type: array
+        items:
+          $ref: "#/definitions/MovieExtendedDTO"
+  MovieExtendedDTO:
+    type: object
+    properties:
+      adult:
+        type: boolean
+      backdrop_path:
+        type: string
+      id:
+        type: integer
+      original_language:
+        type: string
+      original_title:
+        type: string
+      overview:
+        type: string
+      popularity:
+        type: number
+      poster_path:
+        type: string
+      release_date:
+        type: string
+      title:
+        type: string
+      video:
+        type: boolean
+      vote_average:
+        type: number
+      vote_count:
+        type: integer
   FavoritesDto:
     type: object
     properties:
@@ -559,3 +624,14 @@ definitions:
         type: string
       job:
         type: string
+  SortBy:
+    type: string
+    enum:
+      - popularity.asc
+      - popularity.desc
+      - revenue.asc
+      - revenue.desc
+      - vote_average.asc
+      - vote_average.desc
+      - vote_count.asc
+      - vote_count.desc

@@ -1,6 +1,9 @@
+using System.Runtime.Serialization;
+using Humanizer;
 using Microsoft.Extensions.Configuration;
 using MoviesApi.Data.Models;
 using MoviesApi.Data.Repositories.Interfaces;
+using MoviesApi.Services.Helpers;
 using MoviesApi.Services.Interfaces;
 using MoviesDB.API.Swagger.Controllers.Generated;
 using MoviesApi.Services.Helpers;
@@ -85,6 +88,19 @@ public class MovieService : IMovieService
     public async Task RemoveFavorite(FavoritesDto favoritesDto)
     {
         await _repository.RemoveFavorite(favoritesDto.UserId, favoritesDto.MovieId);
+    }
+
+    public async Task<MoviesExtendedResponseDto> GetFilteredMovies(DateTimeOffset? fromDate, DateTimeOffset? toDate,
+        SortBy? sortBy, string language = "en-US",
+        int page = 1)
+    {
+        var enumType = typeof(SortBy);
+        var name = Enum.GetName(typeof(SortBy), sortBy);
+        var enumMemberAttribute = ((EnumMemberAttribute[])enumType.GetField(name).GetCustomAttributes(typeof(EnumMemberAttribute), true)).Single();
+        var sortByTmdbValue = enumMemberAttribute.Value;
+
+        var response = await _moviesClient.GetFilteredMoviesAsync(api_key, language, page, fromDate, toDate, sortByTmdbValue);
+        return DTOMapper.GetExtendedMoviesResponseDTO(response);
     }
 
     public async Task<Rating> GetMovieRatingAsync(int movieId)
@@ -173,4 +189,6 @@ public class MovieService : IMovieService
        };
        return newRating;
     }
+    
+    
 }

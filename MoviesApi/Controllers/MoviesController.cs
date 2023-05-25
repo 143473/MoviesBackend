@@ -13,6 +13,16 @@ public class MoviesController : MoviesControllerBase
     {
         _movieService = movieService;
     }
+
+    public override Task<ActionResult<MoviesExtendedResponseDto>> GetFilteredMovies(DateTimeOffset? fromDate, DateTimeOffset? toDate, SortBy? sort_by)
+    {
+        return Task.Run<ActionResult<MoviesExtendedResponseDto>>(async () =>
+        {
+            var result = await _movieService.GetFilteredMovies(fromDate, toDate, sort_by);
+            return Ok(result);
+        });
+    }
+
     public override Task<ActionResult<MovieResponseDto>> GetMovie(string userId, int movie_id)
     {
         return Task.Run<ActionResult<MovieResponseDto>>(async () =>

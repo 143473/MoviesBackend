@@ -14,6 +14,45 @@ produces:
 schemes:
   - "https"
 paths:
+  '/discover/movie':
+    get:
+      tags:
+        - movies
+      operationId: GetFilteredMovies
+      description: Get a list of movies based on applied filters
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: language
+          in: query
+          type: string
+        - name: page
+          in: query
+          type: integer
+        - name: primary_release_date.gte
+          in: query
+          type: string
+          format: date
+        - name: primary_release_date.lte
+          in: query
+          type: string
+          format: date
+        - name: sort_by
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns list of movies
+          schema:
+            $ref: "#/definitions/MoviesResponseTmdb"
+        401:
+          description: Unauthorized
+        404:
+          description: Movies not found
+          
   '/movie/{movie_id}':
     get:
       tags:

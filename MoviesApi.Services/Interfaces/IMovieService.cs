@@ -15,4 +15,6 @@ public interface IMovieService
     Task<RatedMovieDto> AddRatedMovieAsync(RatedMovieDto ratedMovie);
     Task<RatingDto> AddRatingAsync(RatedMovieDto ratedMovie);
     Task RemoveFavorite(FavoritesDto favoritesDto);
+    Task<MoviesExtendedResponseDto> GetFilteredMovies(DateTimeOffset? fromDate, DateTimeOffset? toDate,
+        SortBy? sortBy, string language = "en-US", int page = 1);
 }
