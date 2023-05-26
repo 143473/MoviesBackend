@@ -151,4 +151,27 @@ public class MoviesRepository : IMoviesRepository
         _context.Update(ratingToUpdate);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<ICollection<Comment>> GetCommentsAsync(int movieId)
+    {
+        ICollection<Comment> comments = new List<Comment>();
+
+        try
+        {
+            comments = await _context.Comments
+                .Where(c => c.MovieId == movieId).ToListAsync();
+            return comments;
+        }
+        catch (InvalidOperationException)
+        {
+            return comments;
+        }
+    }
+
+    public async Task<Comment> AddCommentAsync(Comment comment)
+    {
+        await _context.Comments.AddAsync(comment);
+        await _context.SaveChangesAsync();
+        return comment;
+    }
 }

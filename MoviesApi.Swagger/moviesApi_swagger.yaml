@@ -31,22 +31,6 @@ paths:
           description: Created
         400:
           description: Bad Request
-  '/comment':
-    post:
-      tags:
-        - comments
-      operationId: AddComment
-      parameters:
-        - name: commentRequest
-          in: body
-          schema:
-            $ref: "#/definitions/CommentRequest"
-          required: true
-      responses: 
-        201:
-          description: Yeeeey!!
-        400:
-          description: Bad Request
 
   '/movies/discover':
     get:
@@ -328,8 +312,70 @@ paths:
           description: Unauthorized
         404:
           description: Credits not found
+  
+  '/movie/comments/{movieId}':
+    get:
+      tags:
+        - movies
+      operationId: GetComments
+      description: Get comments for a movie
+      parameters:
+        - name: movieId
+          in: path
+          type: integer
+          required: true
+          description: movie id
+      responses:
+        200:
+          description: Returns comments for a movie
+          schema:
+            $ref: "#/definitions/CommentsDto"
+        401:
+          description: Unauthorized
+        404:
+          description: Comments not found
+          
+  '/movie/comment':
+    post:
+      tags:
+        - movies
+      operationId: AddComment
+      parameters:
+        - name: comment
+          in: body
+          schema:
+            $ref: "#/definitions/CommentDto"
+          required: true
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
           
 definitions:
+  
+  CommentsDto:
+    type: object
+    properties: 
+      comments:
+        type: array
+        items:
+          $ref: '#/definitions/CommentDto'
+  
+  CommentDto:
+    type: object
+    properties:
+      commentId:
+        type: integer
+      movieId:
+        type: integer
+      userId:
+        type: string
+      username:
+        type: string
+      text:
+        type: string
+      
   MovieCreditsResponseDto:
     type: object
     properties:
