@@ -600,6 +600,8 @@ definitions:
         type: string
       IsFavorite:
         type: boolean
+      BackdropPath:
+        type: string
     required:
       - MovieId
       - IsFavorite

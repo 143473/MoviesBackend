@@ -76,7 +76,8 @@ public class MovieService : IMovieService
                 Title = movie.Title,
                 Overview = movie.Overview,
                 ReleaseDate = movie.Release_date,
-                ImageUrl = movie.Poster_path
+                ImageUrl = movie.Poster_path ?? string.Empty,
+                BackdropPath = movie.Backdrop_path ?? string.Empty
             };
 
             await _repository.AddFavorite(favoritesDto.UserId, favoriteMovie);

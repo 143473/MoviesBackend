@@ -643,6 +643,9 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         [Newtonsoft.Json.JsonProperty("IsFavorite", Required = Newtonsoft.Json.Required.Always)]
         public bool IsFavorite { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("BackdropPath", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string BackdropPath { get; set; }
+
         public string ToJson()
         {
 
