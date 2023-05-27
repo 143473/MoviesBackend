@@ -19,6 +19,7 @@ public static class MoviesDtoMapper
                 Description = fm.Overview,
                 ReleaseDate = fm.ReleaseDate,
                 PosterPath = fm.ImageUrl,
+                BackdropPath = fm.BackdropPath,
                 IsFavorite = favoriteIds.Contains(fm.FavoriteMovieId)
             }).ToList()
         };

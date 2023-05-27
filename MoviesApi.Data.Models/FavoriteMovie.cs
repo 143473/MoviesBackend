@@ -7,4 +7,5 @@ public class FavoriteMovie
     public string ReleaseDate { get; set; } = string.Empty;
     public string Overview { get; set; } = string.Empty;
     public string ImageUrl { get; set; } = string.Empty;
+    public string BackdropPath { get; set; } = string.Empty;
 }
