@@ -28,7 +28,7 @@ namespace tmdb_api
         /// <param name="api_key">api key</param>
         /// <returns>Returns list of movies</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<MoviesResponseTmdb> GetFilteredMoviesAsync(string api_key, string language = null, int? page = null, System.DateTimeOffset? primary_release_date_gte = null, System.DateTimeOffset? primary_release_date_lte = null, string sort_by = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<MoviesResponseTmdb> GetFilteredMoviesAsync(string api_key, bool? adult = null, double? vote_count_gte = null, double? vote_average_lte = null, string language = null, int? page = null, System.DateTimeOffset? primary_release_date_gte = null, System.DateTimeOffset? primary_release_date_lte = null, string sort_by = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -106,7 +106,7 @@ namespace tmdb_api
         /// <param name="api_key">api key</param>
         /// <returns>Returns list of movies</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<MoviesResponseTmdb> GetFilteredMoviesAsync(string api_key, string language = null, int? page = null, System.DateTimeOffset? primary_release_date_gte = null, System.DateTimeOffset? primary_release_date_lte = null, string sort_by = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<MoviesResponseTmdb> GetFilteredMoviesAsync(string api_key, bool? adult = null, double? vote_count_gte = null, double? vote_average_lte = null, string language = null, int? page = null, System.DateTimeOffset? primary_release_date_gte = null, System.DateTimeOffset? primary_release_date_lte = null, string sort_by = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (api_key == null)
                 throw new System.ArgumentNullException("api_key");
@@ -114,6 +114,18 @@ namespace tmdb_api
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/discover/movie?");
             urlBuilder_.Append(System.Uri.EscapeDataString("api_key") + "=").Append(System.Uri.EscapeDataString(ConvertToString(api_key, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            if (adult != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("adult") + "=").Append(System.Uri.EscapeDataString(ConvertToString(adult, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (vote_count_gte != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("vote_count.gte") + "=").Append(System.Uri.EscapeDataString(ConvertToString(vote_count_gte, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (vote_average_lte != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("vote_average.lte") + "=").Append(System.Uri.EscapeDataString(ConvertToString(vote_average_lte, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
             if (language != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("language") + "=").Append(System.Uri.EscapeDataString(ConvertToString(language, System.Globalization.CultureInfo.InvariantCulture))).Append("&");

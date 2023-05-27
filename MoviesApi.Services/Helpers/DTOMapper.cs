@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using MoviesDB.API.Swagger.Controllers.Generated;
 using tmdb_api;
 using MovieResponse = tmdb_api.MovieResponse;
@@ -45,19 +46,31 @@ public static class DTOMapper
 
     public static MoviesExtendedResponseDto GetExtendedMoviesResponseDTO(MoviesResponseTmdb moviesResponseTmdb)
     {
-        return new MoviesExtendedResponseDto()
+        MoviesExtendedResponseDto responseDto = new MoviesExtendedResponseDto();
+        responseDto.Results = new List<MovieExtendedDTO>();
+        var place = 0;
+        foreach (var result in moviesResponseTmdb.Results)
         {
-            Results = moviesResponseTmdb.Results
-                .Select(movie => GetMovieExtendedDTO(movie))
-                .ToList()
-        };
+            place++;
+            if (place <= 10)
+            {
+                var extMovie = GetMovieExtendedDTO(result);
+                extMovie.Place = place;
+                responseDto.Results.Add(extMovie);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return responseDto;
     }
 
     public static MovieExtendedDTO GetMovieExtendedDTO(MovieByTitleTmdb movieTmdb)
     {
         return new MovieExtendedDTO
         {
-            Adult = movieTmdb.Adult,
             Backdrop_path = !string.IsNullOrEmpty(movieTmdb.Backdrop_path)
                 ? $"https://image.tmdb.org/t/p/w500{movieTmdb.Backdrop_path}"
                 : null,

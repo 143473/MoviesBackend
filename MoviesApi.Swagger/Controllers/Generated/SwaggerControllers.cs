@@ -35,7 +35,7 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
         /// Get a list of movies based on the applied filter
         /// </remarks>
         /// <returns>Returns a filtered list of movies</returns>
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("movies/discover")]
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("movies/discover")]
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MoviesExtendedResponseDto>> GetFilteredMovies([Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? fromDate, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? toDate, [Microsoft.AspNetCore.Mvc.FromBody] SortBy? sort_by);
 
         /// <remarks>
@@ -682,8 +682,8 @@ namespace MoviesDB.API.Swagger.Controllers.Generated
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class MovieExtendedDTO
     {
-        [Newtonsoft.Json.JsonProperty("adult", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Adult { get; set; }
+        [Newtonsoft.Json.JsonProperty("place", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? Place { get; set; }
 
         [Newtonsoft.Json.JsonProperty("backdrop_path", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Backdrop_path { get; set; }

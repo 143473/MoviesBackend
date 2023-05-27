@@ -89,8 +89,7 @@ public class MovieService : IMovieService
     }
 
     public async Task<MoviesExtendedResponseDto> GetFilteredMovies(DateTimeOffset? fromDate, DateTimeOffset? toDate,
-        SortBy? sortBy, string language = "en-US",
-        int page = 1)
+        SortBy? sortBy, string language = "en-US", int page = 1, bool adult = false, float voteCountGte = 10f, float voteAverageLte = 10f)
     {
         var enumType = typeof(SortBy);
         var name = Enum.GetName(typeof(SortBy), sortBy);
@@ -100,7 +99,9 @@ public class MovieService : IMovieService
         var sortByTmdbValue = enumMemberAttribute.Value;
 
         var response =
-            await _moviesClient.GetFilteredMoviesAsync(api_key, language, page, fromDate, toDate, sortByTmdbValue);
+            await _moviesClient
+            .GetFilteredMoviesAsync(
+                api_key, adult, voteCountGte, voteAverageLte, language, page, fromDate, toDate, sortByTmdbValue);
         return DTOMapper.GetExtendedMoviesResponseDTO(response);
     }
 

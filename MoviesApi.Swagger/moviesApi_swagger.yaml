@@ -33,7 +33,7 @@ paths:
           description: Bad Request
 
   '/movies/discover':
-    get:
+    post:
       tags:
         - movies
       operationId: GetFilteredMovies
@@ -613,8 +613,8 @@ definitions:
   MovieExtendedDTO:
     type: object
     properties:
-      adult:
-        type: boolean
+      place:
+        type: integer
       backdrop_path:
         type: string
       id:

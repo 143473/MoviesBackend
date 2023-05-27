@@ -26,6 +26,15 @@ paths:
           type: string
           required: true
           description: api key
+        - name: adult
+          in: query
+          type: boolean
+        - name: vote_count.gte
+          in: query
+          type: number
+        - name: vote_average.lte
+          in: query
+          type: number
         - name: language
           in: query
           type: string

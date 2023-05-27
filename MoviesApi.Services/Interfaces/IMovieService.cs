@@ -14,8 +14,9 @@ public interface IMovieService
     Task<RatedMovieDto> AddRatedMovieAsync(RatedMovieDto ratedMovie);
     Task<RatingDto> AddRatingAsync(RatedMovieDto ratedMovie);
     Task RemoveFavorite(FavoritesDto favoritesDto);
+
     Task<MoviesExtendedResponseDto> GetFilteredMovies(DateTimeOffset? fromDate, DateTimeOffset? toDate,
-        SortBy? sortBy, string language = "en-US", int page = 1);
+        SortBy? sortBy, string language = "en-US", int page = 1, bool adult = false, float voteCountGte = 10f, float voteAverageLte = 10f);
     Task<MovieCreditsResponseDto> GetMovieCreditsAsync(int movieId);
     Task<CommentsDto> GetCommentsAsync(int movieId);
     Task<CommentDto> AddCommentAsync(CommentDto comment);
