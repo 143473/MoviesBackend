@@ -1,12 +1,10 @@
 using System.Runtime.Serialization;
-using Humanizer;
 using Microsoft.Extensions.Configuration;
 using MoviesApi.Data.Models;
 using MoviesApi.Data.Repositories.Interfaces;
 using MoviesApi.Services.Helpers;
 using MoviesApi.Services.Interfaces;
 using MoviesDB.API.Swagger.Controllers.Generated;
-using MoviesApi.Services.Helpers;
 using tmdb_api;
 
 namespace MoviesApi.Services;
@@ -24,7 +22,7 @@ public class MovieService : IMovieService
         api_key = configuration.GetSection("TMDB")["APIKey"];
     }
 
-    public async Task<MovieResponseDto> GetMovieAsync(string userId, int movie_id, string language = "en_US")
+    public async Task<MovieResponseDto> GetMovieAsync(string? userId, int movie_id, string language = "en_US")
     {
         var movieResponse = await _moviesClient.GetMovieAsync(movie_id, api_key, language);
         var favorites = await GetFavoriteIds(userId, new[] {movie_id});
@@ -56,7 +54,6 @@ public class MovieService : IMovieService
         
         return topFavorites.ToMovieDto(favoritesIds);
     }
-    
 
     private async Task<IReadOnlySet<int>> GetFavoriteIds(string? userId, IEnumerable<int> movieIds)
     {

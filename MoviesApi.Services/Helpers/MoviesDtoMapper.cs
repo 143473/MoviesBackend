@@ -42,7 +42,7 @@ public static class MoviesDtoMapper
 
     public static MovieResponseDto ToMovieResponseDto(this MovieResponse movie, IReadOnlySet<int> favoriteIds)
     {
-        return new MovieResponseDto()
+        return new MovieResponseDto
         {
             Id = movie.Id,
             Title = movie.Title,
@@ -55,7 +55,7 @@ public static class MoviesDtoMapper
             Vote_average = movie.Vote_average,
             Vote_count = movie.Vote_count,
             IsFavorite = favoriteIds.Contains(movie.Id),
-            Genres = movie.Genres.Select(g => new GenreDto()
+            Genres = movie.Genres.Select(g => new GenreDto
             {
                 Id = g.Id,
                 Name = g.Name

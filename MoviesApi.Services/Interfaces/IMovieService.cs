@@ -1,12 +1,11 @@
 using MoviesDB.API.Swagger.Controllers.Generated;
-using MovieResponse = tmdb_api.MovieResponse;
 using Rating = MoviesApi.Data.Models.Rating;
 
 namespace MoviesApi.Services.Interfaces;
 
 public interface IMovieService
 {
-    Task<MovieResponseDto> GetMovieAsync(string userId, int movie_id, string language = "en_US");
+    Task<MovieResponseDto> GetMovieAsync(string? userId, int movie_id, string language = "en_US");
     Task<MovieListDto> GetMoviesByTitleAsync(string? userId, string movieName, string language = "en_US");
     Task<MovieListDto> GetFavoriteMovies(string userId);
     Task<MovieListDto> GetTopFavorites(string? userId);
