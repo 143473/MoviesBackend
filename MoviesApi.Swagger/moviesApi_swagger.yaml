@@ -677,8 +677,6 @@ definitions:
   PersonDTO:
     type: object
     properties:
-      adult:
-        type: boolean
       gender:
         type: string
       id:

@@ -15,19 +15,18 @@ public static class DTOMapper
         foreach (var result in personsResponseTmdb.Results)
         {
             personsResponseDto.Persons.Add(new PersonDTO
-            {
-                Adult = result.Adult,
-                Gender = result.Gender == 2 ? "male" : "female",
-                Id = result.Id,
-                Known_for_department = result.Known_for_department,
-                Name = result.Name,
-                Original_name = result.Original_name,
-                Popularity = result.Popularity,
-                Profile_path = !string.IsNullOrEmpty(result.Profile_path)
-                    ? $"https://image.tmdb.org/t/p/w500{result.Profile_path}"
-                    : null,
-                Known_for = GetMovieDTOList(result.Known_for)
-            });
+                {
+                    Gender = result.Gender == 2 ? "male" : (result.Gender == 1 ? "female" : "other"),
+                    Id = result.Id,
+                    Known_for_department = result.Known_for_department,
+                    Name = result.Name,
+                    Original_name = result.Original_name,
+                    Popularity = result.Popularity,
+                    Profile_path = !string.IsNullOrEmpty(result.Profile_path)
+                        ? $"https://image.tmdb.org/t/p/w500{result.Profile_path}"
+                        : null,
+                    Known_for = GetMovieDTOList(result.Known_for)
+                });
         }
 
         return personsResponseDto;
@@ -88,7 +87,7 @@ public static class DTOMapper
             Vote_average = movieTmdb.Vote_average,
             Vote_count = movieTmdb.Vote_count
         };
-        }
+    }
 
     public static MovieDto GetMovieDTO(MovieResponse? movieResponse = null, MovieByTitleTmdb? movieByTitleTmdb = null)
     {
@@ -105,6 +104,7 @@ public static class DTOMapper
                     : null
             };
         }
+
         return new MovieDto
         {
             MovieId = movieByTitleTmdb.Id,
@@ -115,7 +115,6 @@ public static class DTOMapper
                 ? $"https://image.tmdb.org/t/p/w500{movieByTitleTmdb.Poster_path}"
                 : null
         };
-
     }
 
     public static PersonDetailsDTO GetPersonDetailsDto(PersonDetailsTmdb personDetailsTmdb)
@@ -125,7 +124,7 @@ public static class DTOMapper
             Biography = personDetailsTmdb.Biography,
             Birthday = personDetailsTmdb.Birthday,
             Deathday = personDetailsTmdb.Deathday,
-            Gender = personDetailsTmdb.Gender == 2 ? "male" : "female",
+            Gender = personDetailsTmdb.Gender == 2 ? "male" : (personDetailsTmdb.Gender == 1 ? "female" : "Other"),
             Homepage = personDetailsTmdb.Homepage,
             Id = personDetailsTmdb.Id,
             Name = personDetailsTmdb.Name,
