@@ -71,7 +71,10 @@ public static class MoviesDtoMapper
             Original_language = movie.Original_language,
             Runtime = movie.Runtime,
             Tagline = movie.Tagline,
-            Status = movie.Status
+            Status = movie.Status,
+            Backdrop_path = !string.IsNullOrEmpty(movie.Backdrop_path)
+                ? $"{ImageUrl}{movie.Backdrop_path}"
+                : null,
         };
     }
 
