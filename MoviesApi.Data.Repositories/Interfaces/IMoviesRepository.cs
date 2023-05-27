@@ -16,4 +16,6 @@ public interface IMoviesRepository
     Task<Rating> AddRatingAsync(Rating rating);
     Task UpdateRatingAsync(Rating rating, RatedMovie ratedMovie);
     Task UpdateOnlyRatingAsync(Rating rating);
+    Task<ICollection<Comment>> GetCommentsAsync(int movieId);
+    Task<Comment> AddCommentAsync(Comment comment);
 }

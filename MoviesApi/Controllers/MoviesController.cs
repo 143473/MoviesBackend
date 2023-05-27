@@ -93,4 +93,22 @@ public class MoviesController : MoviesControllerBase
             return Ok(result);
         });
     }
+
+    public override Task<ActionResult<CommentsDto>> GetComments(int movieId)
+    {
+        return Task.Run<ActionResult<CommentsDto>>(async () =>
+        {
+            var result = await _movieService.GetCommentsAsync(movieId);
+            return Ok(result);
+        });
+    }
+
+    public override Task<IActionResult> AddComment(CommentDto comment)
+    {
+        return Task.Run<IActionResult>(async () =>
+        {
+            var result = await _movieService.AddCommentAsync(comment);
+            return Created($"/movie/comments/{comment.MovieId}", result);
+        });
+    }
 }

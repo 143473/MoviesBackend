@@ -14,6 +14,7 @@ public class MoviesContext : DbContext, IMoviesContext
     public DbSet<Favorites> Favorites { get; set; } = null!;
     public DbSet<Rating> Ratings { get; set; } = null!;
     public DbSet<RatedMovie> RatedMovies { get; set; } = null!;
+    public DbSet<Comment> Comments { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +33,9 @@ public class MoviesContext : DbContext, IMoviesContext
         modelBuilder.Entity<Rating>()
             .Property(p => p.MovieId)
             .ValueGeneratedNever();
+
+        modelBuilder.Entity<Comment>()
+            .HasKey(c => c.CommentId);
 
         base.OnModelCreating(modelBuilder);
     }

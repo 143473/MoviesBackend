@@ -17,4 +17,6 @@ public interface IMovieService
     Task<MoviesExtendedResponseDto> GetFilteredMovies(DateTimeOffset? fromDate, DateTimeOffset? toDate,
         SortBy? sortBy, string language = "en-US", int page = 1);
     Task<MovieCreditsResponseDto> GetMovieCreditsAsync(int movieId);
+    Task<CommentsDto> GetCommentsAsync(int movieId);
+    Task<CommentDto> AddCommentAsync(CommentDto comment);
 }
