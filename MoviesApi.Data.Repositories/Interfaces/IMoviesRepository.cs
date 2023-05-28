@@ -12,7 +12,7 @@ public interface IMoviesRepository
     Task RemoveFavorite(string userId, int movieId);
     Task<Rating> GetMovieRatingAsync(int movieId);
     Task AddRatedMovieAsync(RatedMovie movie);
-    Task<RatedMovie> GetMovieRatingByUserId(string userId, int movieId);
+    Task<RatedMovie?> GetMovieRatingByUserId(string userId, int movieId);
     Task<Rating> AddRatingAsync(Rating rating);
     Task UpdateRatingAsync(Rating rating, RatedMovie ratedMovie);
     Task UpdateOnlyRatingAsync(Rating rating);
