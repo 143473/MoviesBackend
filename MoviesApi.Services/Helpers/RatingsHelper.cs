@@ -35,9 +35,9 @@ public static class RatingsHelper
     }
     
 
-    public static Rating CalculateUpdatedMovieRating(this RatedMovie oldRating, RatedMovie newRating, Rating rating)
+    public static Rating CalculateUpdatedMovieRating(this RatedMovie oldRating, RatedMovie newRating, Rating? rating)
     {
-        var oldVotes = (int) (rating.Votes - 1);
+        var oldVotes = (int) (rating!.Votes - 1);
         var oldRatingValue = ((rating.RatingValue * rating.Votes) - oldRating.Rating) / oldVotes;
         var newVotes = (int) (rating.Votes + 1);
         var newRatingValue = ((oldRatingValue * rating.Votes) + newRating.Rating) / newVotes;

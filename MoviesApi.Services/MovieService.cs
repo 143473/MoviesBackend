@@ -114,7 +114,17 @@ public class MovieService : IMovieService
 
     public async Task<Rating> GetMovieRatingAsync(int movieId)
     {
-        return await _repository.GetMovieRatingAsync(movieId);
+        Rating? rating = await _repository.GetMovieRatingAsync(movieId);
+        if (rating == null)
+        {
+            rating = new Rating()
+            {
+                MovieId = 0,
+                RatingValue = 0,
+                Votes = 0
+            };
+        }
+        return rating;
     }
 
     public async Task<RatedMovieDto> AddRatedMovieAsync(RatedMovieDto ratedMovie)
@@ -141,7 +151,7 @@ public class MovieService : IMovieService
         };
 
         RatedMovie? oldRatedMovie = await _repository.GetMovieRatingByUserId(newRatedMovie.UserId, newRatedMovie.RatedMovieId);
-        Rating ratingInDb = await GetMovieRatingAsync(newRatedMovie.RatedMovieId);
+        Rating? ratingInDb = await _repository.GetMovieRatingAsync(newRatedMovie.RatedMovieId);
         Rating newRating;
         
         if (oldRatedMovie == null)
@@ -181,7 +191,7 @@ public class MovieService : IMovieService
         return newRating;
     }
 
-    private async Task<Rating> UpdateRating(RatedMovie oldRatedMovie, RatedMovie newRatedMovie, Rating rating)
+    private async Task<Rating> UpdateRating(RatedMovie oldRatedMovie, RatedMovie newRatedMovie, Rating? rating)
     {
         Rating newRating = oldRatedMovie.CalculateUpdatedMovieRating(newRatedMovie, rating);
 

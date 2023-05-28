@@ -76,9 +76,9 @@ public class MoviesRepository : IMoviesRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Rating> GetMovieRatingAsync(int movieId)
+    public async Task<Rating?> GetMovieRatingAsync(int movieId)
     {
-        Rating rating = (await _context.Ratings.FirstOrDefaultAsync(r => r.MovieId == movieId))!;
+        Rating? rating = (await _context.Ratings.FirstOrDefaultAsync(r => r.MovieId == movieId))!;
         return rating;
     }
 
