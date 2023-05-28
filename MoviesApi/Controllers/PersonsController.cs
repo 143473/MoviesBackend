@@ -40,4 +40,13 @@ public class PersonsController : PersonsControllerBase
             return Ok(result);
         });
     }
+
+    public override Task<ActionResult<PersonsResponseDTO>> GetTrendingPeople()
+    {
+        return Task.Run<ActionResult<PersonsResponseDTO>>(async () =>
+        {
+            var result = await _personService.GetTrendingPeople();
+            return Ok(result);
+        });
+    }
 }
