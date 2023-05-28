@@ -9,5 +9,6 @@ public interface IPersonService
         int page = 1);
 
     Task<PersonDetailsDTO> GetPersonDetails(int id, string language ="en-US");
-    Task<PersonMovieCreditsDTO> GetPersonMovies(int id, string language = "en-Us");
+    Task<PersonMovieCreditsDTO> GetPersonMovies(int id, string language = "en-US");
+    Task<PersonsResponseDTO> GetTrendingPeople(string timeWindow = "week", string language = "en-US");
 }

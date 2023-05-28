@@ -35,4 +35,10 @@ public class PersonService : IPersonService
         var response = await _personsClient.GetPersonMoviesAsync(api_key, id, language);
         return DTOMapper.GetPersonMovieCreditsDTO(response);
     }
+
+    public async Task<PersonsResponseDTO> GetTrendingPeople(string timeWindow = "week", string language = "en-US")
+    {
+        var response = await _personsClient.GetTrendingPeopleAsync(api_key, timeWindow, language);
+        return DTOMapper.GePersonsResponseDto(response);
+    }
 }

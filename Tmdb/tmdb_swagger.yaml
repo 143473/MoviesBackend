@@ -151,7 +151,36 @@ paths:
           description: Unauthorized
         404:
           description: Person not found
-        
+  '/trending/person/{time_window}':
+    get:
+      tags:
+        - persons
+      operationId: GetTrendingPeople
+      description: Get a list of trending people in the last time frame
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: time_window
+          in: path
+          type: string
+          required: true
+          description: time window can be either week or day
+        - name: language
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns list of persons
+          schema:
+            $ref: "#/definitions/PersonsResponseTmdb"
+        401:
+          description: Unauthorized
+        404:
+          description: Person not found
+          
   '/search/person':
     get:
       tags:
@@ -458,6 +487,8 @@ definitions:
         type: string
       name: 
         type: string
+      media_type:
+        type: string
       original_name:
         type: string
       popularity:
@@ -495,6 +526,8 @@ definitions:
       original_language:
         type: string
       original_title:
+        type: string
+      media_type:
         type: string
       overview:
         type: string
