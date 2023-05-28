@@ -220,7 +220,6 @@ public class MovieService : IMovieService
 
     public async Task<CommentDto> AddCommentAsync(CommentDto comment)
     {
-        //TODO: Convert comment dto to comment
         Comment newComment = new Comment()
         {
             MovieId = comment.MovieId.Value,
