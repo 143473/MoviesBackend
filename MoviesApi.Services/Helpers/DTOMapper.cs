@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using MoviesDB.API.Swagger.Controllers.Generated;
 using tmdb_api;
 using MovieResponse = tmdb_api.MovieResponse;
@@ -14,25 +15,24 @@ public static class DTOMapper
         foreach (var result in personsResponseTmdb.Results)
         {
             personsResponseDto.Persons.Add(new PersonDTO
-            {
-                Adult = result.Adult,
-                Gender = result.Gender == 2 ? "male" : "female",
-                Id = result.Id,
-                Known_for_department = result.Known_for_department,
-                Name = result.Name,
-                Original_name = result.Original_name,
-                Popularity = result.Popularity,
-                Profile_path = !string.IsNullOrEmpty(result.Profile_path)
-                    ? $"https://image.tmdb.org/t/p/w500{result.Profile_path}"
-                    : null,
-                Known_for = GetMovieDTOList(result.Known_for)
-            });
+                {
+                    Gender = result.Gender == 2 ? "male" : (result.Gender == 1 ? "female" : "other"),
+                    Id = result.Id,
+                    Known_for_department = result.Known_for_department,
+                    Name = result.Name,
+                    Original_name = result.Original_name,
+                    Popularity = result.Popularity,
+                    Profile_path = !string.IsNullOrEmpty(result.Profile_path)
+                        ? $"https://image.tmdb.org/t/p/w500{result.Profile_path}"
+                        : null,
+                    Known_for = GetMovieDTOList(result.Known_for)
+                });
         }
 
         return personsResponseDto;
     }
 
-    public static List<MovieDto> GetMovieDTOList(ICollection<MovieResponse> movieResponses)
+    public static List<MovieDto> GetMovieDTOList(ICollection<MovieResponse?> movieResponses)
     {
         List<MovieDto> movieDTOList = new List<MovieDto>();
         foreach (var movie in movieResponses)
@@ -42,16 +42,77 @@ public static class DTOMapper
 
         return movieDTOList;
     }
-    
-    public static MovieDto GetMovieDTO(MovieResponse movieResponse)
+
+    public static MoviesExtendedResponseDto GetExtendedMoviesResponseDTO(MoviesResponseTmdb moviesResponseTmdb)
     {
+        MoviesExtendedResponseDto responseDto = new MoviesExtendedResponseDto();
+        responseDto.Results = new List<MovieExtendedDTO>();
+        var place = 0;
+        foreach (var result in moviesResponseTmdb.Results)
+        {
+            place++;
+            if (place <= 10)
+            {
+                var extMovie = GetMovieExtendedDTO(result);
+                extMovie.Place = place;
+                responseDto.Results.Add(extMovie);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return responseDto;
+    }
+
+    public static MovieExtendedDTO GetMovieExtendedDTO(MovieByTitleTmdb movieTmdb)
+    {
+        return new MovieExtendedDTO
+        {
+            Backdrop_path = !string.IsNullOrEmpty(movieTmdb.Backdrop_path)
+                ? $"https://image.tmdb.org/t/p/w500{movieTmdb.Backdrop_path}"
+                : null,
+            Id = movieTmdb.Id,
+            Original_language = movieTmdb.Original_language,
+            Original_title = movieTmdb.Original_title,
+            Overview = movieTmdb.Overview,
+            Popularity = movieTmdb.Popularity,
+            Poster_path = !string.IsNullOrEmpty(movieTmdb.Poster_path)
+                ? $"https://image.tmdb.org/t/p/w500{movieTmdb.Poster_path}"
+                : null,
+            Release_date = movieTmdb.Release_date,
+            Title = movieTmdb.Title,
+            Video = movieTmdb.Video,
+            Vote_average = movieTmdb.Vote_average,
+            Vote_count = movieTmdb.Vote_count
+        };
+    }
+
+    public static MovieDto GetMovieDTO(MovieResponse? movieResponse = null, MovieByTitleTmdb? movieByTitleTmdb = null)
+    {
+        if (movieResponse != null)
+        {
+            return new MovieDto
+            {
+                MovieId = movieResponse.Id,
+                Title = movieResponse.Title,
+                Description = movieResponse.Overview,
+                ReleaseDate = movieResponse.Release_date,
+                PosterPath = !string.IsNullOrEmpty(movieResponse.Poster_path)
+                    ? $"https://image.tmdb.org/t/p/w500{movieResponse.Poster_path}"
+                    : null
+            };
+        }
+
         return new MovieDto
         {
-            MovieId = movieResponse.Id,
-            Description = movieResponse.Overview,
-            ReleaseDate = movieResponse.Release_date,
-            PosterPath = !string.IsNullOrEmpty(movieResponse.Poster_path)
-                ? $"https://image.tmdb.org/t/p/w500{movieResponse.Poster_path}"
+            MovieId = movieByTitleTmdb.Id,
+            Title = movieByTitleTmdb.Title,
+            Description = movieByTitleTmdb.Overview,
+            ReleaseDate = movieByTitleTmdb.Release_date,
+            PosterPath = !string.IsNullOrEmpty(movieByTitleTmdb.Poster_path)
+                ? $"https://image.tmdb.org/t/p/w500{movieByTitleTmdb.Poster_path}"
                 : null
         };
     }
@@ -63,7 +124,7 @@ public static class DTOMapper
             Biography = personDetailsTmdb.Biography,
             Birthday = personDetailsTmdb.Birthday,
             Deathday = personDetailsTmdb.Deathday,
-            Gender = personDetailsTmdb.Gender == 2 ? "male" : "female",
+            Gender = personDetailsTmdb.Gender == 2 ? "male" : (personDetailsTmdb.Gender == 1 ? "female" : "Other"),
             Homepage = personDetailsTmdb.Homepage,
             Id = personDetailsTmdb.Id,
             Name = personDetailsTmdb.Name,

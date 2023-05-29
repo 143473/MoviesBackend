@@ -14,6 +14,54 @@ produces:
 schemes:
   - "https"
 paths:
+  '/discover/movie':
+    get:
+      tags:
+        - movies
+      operationId: GetFilteredMovies
+      description: Get a list of movies based on applied filters
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: adult
+          in: query
+          type: boolean
+        - name: vote_count.gte
+          in: query
+          type: number
+        - name: vote_average.lte
+          in: query
+          type: number
+        - name: language
+          in: query
+          type: string
+        - name: page
+          in: query
+          type: integer
+        - name: primary_release_date.gte
+          in: query
+          type: string
+          format: date
+        - name: primary_release_date.lte
+          in: query
+          type: string
+          format: date
+        - name: sort_by
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns list of movies
+          schema:
+            $ref: "#/definitions/MoviesResponseTmdb"
+        401:
+          description: Unauthorized
+        404:
+          description: Movies not found
+          
   '/movie/{movie_id}':
     get:
       tags:
@@ -103,7 +151,36 @@ paths:
           description: Unauthorized
         404:
           description: Person not found
-        
+  '/trending/person/{time_window}':
+    get:
+      tags:
+        - persons
+      operationId: GetTrendingPeople
+      description: Get a list of trending people in the last time frame
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: time_window
+          in: path
+          type: string
+          required: true
+          description: time window can be either week or day
+        - name: language
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns list of persons
+          schema:
+            $ref: "#/definitions/PersonsResponseTmdb"
+        401:
+          description: Unauthorized
+        404:
+          description: Person not found
+          
   '/search/person':
     get:
       tags:
@@ -193,8 +270,104 @@ paths:
         404:
           description: Movies not found
 
-        
+  '/movie/{movie_id}/credits':
+    get:
+      tags:
+        - movies
+      operationId: GetMovieCredits
+      description: Get a movie's credits by its Id
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: movie_id
+          in: path
+          type: integer
+          required: true
+          description: movie id
+        - name: language
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns credits for a movie
+          schema:
+            $ref: "#/definitions/MovieCreditsResponseTmdb"
+        401:
+          description: Unauthorized
+        404:
+          description: Credits not found
 definitions:
+  MovieCreditsResponseTmdb:
+    type: object
+    properties:
+      cast:
+        type: array
+        items:
+          $ref: '#/definitions/MovieCast'
+      crew:
+        type: array
+        items:
+          $ref: '#/definitions/MovieCrew'
+      id:
+        type: integer
+        
+  MovieCast:
+    type: object
+    properties: 
+      adult:
+        type: boolean
+      gender:
+        type: integer
+      id:
+        type: integer
+      known_for_department:
+        type: string
+      name:
+        type: string
+      original_name:
+        type: string
+      popularity:
+        type: number
+      profile_path: 
+        type: string
+      cast_id:
+        type: integer
+      character:
+        type: string
+      credit_id:
+        type: string
+      order:
+        type: integer
+  
+  MovieCrew:
+    type: object
+    properties:
+      adult:
+        type: boolean
+      gender:
+        type: integer
+      id:
+        type: integer
+      known_for_department:
+        type: string
+      name:
+        type: string
+      original_name:
+        type: string
+      popularity:
+        type: number
+      profile_path:
+        type: string
+      credit_id:
+        type: string
+      department:
+        type: string
+      job:
+        type: string
+  
   PersonMoviesResponseTmdb:
     type: object
     properties: 
@@ -314,6 +487,8 @@ definitions:
         type: string
       name: 
         type: string
+      media_type:
+        type: string
       original_name:
         type: string
       popularity:
@@ -351,6 +526,8 @@ definitions:
       original_language:
         type: string
       original_title:
+        type: string
+      media_type:
         type: string
       overview:
         type: string

@@ -34,7 +34,7 @@ public class MoviesRepository : IMoviesRepository
     {
         var result = await _context.Favorites
             .GroupBy(favorites => favorites.FavoriteMovieId)
-            .Select(grouping => new { Movie = grouping.First().FavoriteMovie, Count = grouping.Count() })
+            .Select(grouping => new {Movie = grouping.First().FavoriteMovie, Count = grouping.Count()})
             .OrderByDescending(movieCount => movieCount.Count)
             .Take(10)
             .ToListAsync();
@@ -45,9 +45,9 @@ public class MoviesRepository : IMoviesRepository
     public async Task<FavoriteMovie?> GetFavorite(int movieId)
     {
         return await _context.FavoriteMovies
-            .FirstOrDefaultAsync(fm => fm.FavoriteMovieId == movieId);  
+            .FirstOrDefaultAsync(fm => fm.FavoriteMovieId == movieId);
     }
-    
+
     public async Task AddFavorite(string userId, FavoriteMovie favoriteMovie)
     {
         await _context.Favorites.AddAsync(new Favorites
@@ -55,7 +55,7 @@ public class MoviesRepository : IMoviesRepository
             UserId = userId,
             FavoriteMovie = favoriteMovie
         });
-        
+
         await _context.SaveChangesAsync();
     }
 
@@ -64,36 +64,22 @@ public class MoviesRepository : IMoviesRepository
         Favorites toRemove;
         try
         {
-          toRemove =  await _context.Favorites
-             .FirstAsync(x => x.UserId == userId && x.FavoriteMovieId == movieId);
+            toRemove = await _context.Favorites
+                .FirstAsync(x => x.UserId == userId && x.FavoriteMovieId == movieId);
         }
         catch (InvalidOperationException)
         {
-           return;
+            return;
         }
+
         _context.Remove(toRemove);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Rating> GetMovieRatingAsync(int movieId)
+    public async Task<Rating?> GetMovieRatingAsync(int movieId)
     {
-        Rating rating = new Rating
-        {
-            MovieId = 0,
-            RatingValue = 0,
-            Votes = 0
-        };
-        
-        try
-        {
-            rating = await _context.Ratings.FirstAsync(r => r.MovieId == movieId);
-            return rating;
-        }
-        catch (InvalidOperationException)
-        {
-            return rating;
-        }
-        
+        Rating? rating = (await _context.Ratings.FirstOrDefaultAsync(r => r.MovieId == movieId))!;
+        return rating;
     }
 
     public async Task AddRatedMovieAsync(RatedMovie ratedMovie)
@@ -102,24 +88,10 @@ public class MoviesRepository : IMoviesRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<RatedMovie> GetMovieRatingByUserId(string userId, int movieId)
+    public async Task<RatedMovie?> GetMovieRatingByUserId(string userId, int movieId)
     {
-        RatedMovie ratedMovie = new RatedMovie()
-        {
-            RatedMovieId = 0,
-            Rating = 0,
-            UserId = null
-        };
-        
-        try
-        {
-            ratedMovie = await _context.RatedMovies.FirstAsync(r => r.RatedMovieId == movieId && r.UserId == userId);
-            return ratedMovie;
-        }
-        catch (InvalidOperationException)
-        {
-            return ratedMovie;
-        }
+        RatedMovie? ratedMovie = await _context.RatedMovies.FirstOrDefaultAsync(r => r.RatedMovieId == movieId && r.UserId == userId);
+        return ratedMovie;
     }
 
     public async Task<Rating> AddRatingAsync(Rating rating)
@@ -136,8 +108,9 @@ public class MoviesRepository : IMoviesRepository
         ratingToUpdate.RatingValue = rating.RatingValue;
         _context.Update(ratingToUpdate);
         await _context.SaveChangesAsync();
-        
-        RatedMovie movieToUpdate = await _context.RatedMovies.FirstAsync(m => m.RatedMovieId == ratedMovie.RatedMovieId && m.UserId == ratedMovie.UserId);
+
+        RatedMovie movieToUpdate = await _context.RatedMovies.FirstAsync(m =>
+            m.RatedMovieId == ratedMovie.RatedMovieId && m.UserId == ratedMovie.UserId);
         movieToUpdate.Rating = ratedMovie.Rating;
         _context.Update(movieToUpdate);
         await _context.SaveChangesAsync();
@@ -150,5 +123,28 @@ public class MoviesRepository : IMoviesRepository
         ratingToUpdate.RatingValue = rating.RatingValue;
         _context.Update(ratingToUpdate);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<ICollection<Comment>> GetCommentsAsync(int movieId)
+    {
+        ICollection<Comment> comments = new List<Comment>();
+
+        try
+        {
+            comments = await _context.Comments
+                .Where(c => c.MovieId == movieId).ToListAsync();
+            return comments;
+        }
+        catch (InvalidOperationException)
+        {
+            return comments;
+        }
+    }
+
+    public async Task<Comment> AddCommentAsync(Comment comment)
+    {
+        await _context.Comments.AddAsync(comment);
+        await _context.SaveChangesAsync();
+        return comment;
     }
 }

@@ -31,23 +31,36 @@ paths:
           description: Created
         400:
           description: Bad Request
-  '/comment':
+
+  '/movies/discover':
     post:
       tags:
-        - comments
-      operationId: AddComment
+        - movies
+      operationId: GetFilteredMovies
+      description: Get a list of movies based on the applied filter
       parameters:
-        - name: commentRequest
+        - name: fromDate
+          in: query
+          type: string
+          format: date
+        - name: toDate
+          in: query
+          type: string
+          format: date
+        - name: sort_by
           in: body
           schema:
-            $ref: "#/definitions/CommentRequest"
-          required: true
-      responses: 
-        201:
-          description: Yeeeey!!
-        400:
-          description: Bad Request
-
+            $ref: "#/definitions/SortBy"
+      responses:
+        200:
+          description: Returns a filtered list of movies
+          schema:
+            $ref: "#/definitions/MoviesExtendedResponseDto"
+        401:
+          description: Unauthorized
+        404:
+          description: Movies not found
+        
   '/movie/{movie_id}':
     get:
       tags:
@@ -55,6 +68,10 @@ paths:
       operationId: GetMovie
       description: Get a movie by id
       parameters:
+        - name: userId
+          in: query
+          required: false
+          type: string
         - name: movie_id
           in: path
           required: true
@@ -63,7 +80,7 @@ paths:
         200:
           description: Returns a movie
           schema:
-            $ref: "#/definitions/MovieResponse"
+            $ref: "#/definitions/MovieResponseDto"
         401:
           description: Unauthorized
         404:
@@ -87,7 +104,7 @@ paths:
         200:
           description: Returns a list of movies
           schema:
-            $ref: "#/definitions/MoviesResponseDto"
+            $ref: "#/definitions/MovieListDto"
         401:
           description: Unauthorized
         404:
@@ -119,7 +136,7 @@ paths:
          200:
           description: Return a list of favorite movies for a specific user
           schema:
-            $ref: "#/definitions/MoviesResponseDto"
+            $ref: "#/definitions/MovieListDto"
     delete: 
         tags:
             - movies
@@ -148,7 +165,7 @@ paths:
         200:
           description: Return a list of top favorite movies
           schema:
-            $ref: "#/definitions/MoviesResponseDto"
+            $ref: "#/definitions/MovieListDto"
   '/movie/rating/{movieId}':
     get:
       tags:
@@ -265,8 +282,185 @@ paths:
           description: Unauthorized
         404:
           description: Person not found
+          
+  '/trending/persons':
+    get:
+      tags:
+        - persons
+      operationId: GetTrendingPeople
+      description: Get a list of trending people in the last time frame
+      responses:
+        200:
+          description: Returns list of persons
+          schema:
+            $ref: "#/definitions/PersonsResponseDTO"
+        401:
+          description: Unauthorized
+        404:
+          description: Person not found
+          
+  '/movie/{movieId}/credits':
+    get:
+      tags:
+        - movies
+      operationId: GetMovieCredits
+      description: Get a movie's credits by its Id
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+          required: true
+          description: api key
+        - name: movieId
+          in: path
+          type: integer
+          required: true
+          description: movie id
+        - name: language
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns credits for a movie
+          schema:
+            $ref: "#/definitions/MovieCreditsResponseDto"
+        401:
+          description: Unauthorized
+        404:
+          description: Credits not found
+  
+  '/movie/comments/{movieId}':
+    get:
+      tags:
+        - movies
+      operationId: GetComments
+      description: Get comments for a movie
+      parameters:
+        - name: movieId
+          in: path
+          type: integer
+          required: true
+          description: movie id
+      responses:
+        200:
+          description: Returns comments for a movie
+          schema:
+            $ref: "#/definitions/CommentsDto"
+        401:
+          description: Unauthorized
+        404:
+          description: Comments not found
+          
+  '/movie/comment':
+    post:
+      tags:
+        - movies
+      operationId: AddComment
+      parameters:
+        - name: comment
+          in: body
+          schema:
+            $ref: "#/definitions/CommentDto"
+          required: true
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+          
 definitions:
-  MovieResponse:
+  
+  CommentsDto:
+    type: object
+    properties: 
+      comments:
+        type: array
+        items:
+          $ref: '#/definitions/CommentDto'
+  
+  CommentDto:
+    type: object
+    properties:
+      commentId:
+        type: integer
+      movieId:
+        type: integer
+      userId:
+        type: string
+      username:
+        type: string
+      text:
+        type: string
+      
+  MovieCreditsResponseDto:
+    type: object
+    properties:
+      cast:
+        type: array
+        items:
+          $ref: '#/definitions/MovieCastDto'
+      crew:
+        type: array
+        items:
+          $ref: '#/definitions/MovieCrewDto'
+      id:
+        type: integer
+  
+  MovieCastDto:
+    type: object
+    properties:
+      adult:
+        type: boolean
+      gender:
+        type: integer
+      id:
+        type: integer
+      known_for_department:
+        type: string
+      name:
+        type: string
+      original_name:
+        type: string
+      popularity:
+        type: number
+      profile_path:
+        type: string
+      cast_id:
+        type: integer
+      character:
+        type: string
+      credit_id:
+        type: string
+      order:
+        type: integer
+  
+  MovieCrewDto:
+    type: object
+    properties:
+      adult:
+        type: boolean
+      gender:
+        type: integer
+      id:
+        type: integer
+      known_for_department:
+        type: string
+      name:
+        type: string
+      original_name:
+        type: string
+      popularity:
+        type: number
+      profile_path:
+        type: string
+      credit_id:
+        type: string
+      department:
+        type: string
+      job:
+        type: string
+  
+  MovieResponseDto:
     type: object
     properties:
       adult:
@@ -282,7 +476,7 @@ definitions:
       genres:
         type: array
         items:
-          $ref: "#/definitions/Genre"
+          $ref: "#/definitions/GenreDto"
       homepage:
          type: string
       id:
@@ -329,10 +523,12 @@ definitions:
          type: number
       vote_count:
          type: integer
+      isFavorite:
+         type: boolean
     required:
       - id
 
-  Genre:
+  GenreDto:
     type: object
     properties:
       id:
@@ -398,7 +594,7 @@ definitions:
         type: string
       movieId:
         type: string
-  MoviesResponseDto:
+  MovieListDto:
     type: object
     properties:
       Results:
@@ -420,9 +616,47 @@ definitions:
         type: string
       IsFavorite:
         type: boolean
+      BackdropPath:
+        type: string
     required:
       - MovieId
       - IsFavorite
+  MoviesExtendedResponseDto:
+    type: object
+    properties:
+      Results:
+        type: array
+        items:
+          $ref: "#/definitions/MovieExtendedDTO"
+  MovieExtendedDTO:
+    type: object
+    properties:
+      place:
+        type: integer
+      backdrop_path:
+        type: string
+      id:
+        type: integer
+      original_language:
+        type: string
+      original_title:
+        type: string
+      overview:
+        type: string
+      popularity:
+        type: number
+      poster_path:
+        type: string
+      release_date:
+        type: string
+      title:
+        type: string
+      video:
+        type: boolean
+      vote_average:
+        type: number
+      vote_count:
+        type: integer
   FavoritesDto:
     type: object
     properties:
@@ -461,8 +695,6 @@ definitions:
   PersonDTO:
     type: object
     properties:
-      adult:
-        type: boolean
       gender:
         type: string
       id:
@@ -553,3 +785,14 @@ definitions:
         type: string
       job:
         type: string
+  SortBy:
+    type: string
+    enum:
+      - popularity.asc
+      - popularity.desc
+      - revenue.asc
+      - revenue.desc
+      - vote_average.asc
+      - vote_average.desc
+      - vote_count.asc
+      - vote_count.desc
