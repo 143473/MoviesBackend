@@ -34,4 +34,20 @@ public class IntegrationTest : TestFixture
         var movieResponseDto = await response.Content.ReadFromJsonAsync<MovieResponseDto>();
         Assert.That(movieResponseDto?.IsFavorite, Is.True);
     }
+    
+    [Test]
+    public async Task AddMovieRating()
+    {
+        var ratedMovieDto = A<RatedMovieDto>();
+
+        var client = _factory.CreateClient();
+        
+        _factory.MoviesClientMock
+            .Setup(client => client.GetMovieAsync(ratedMovieDto.RatedMovieId.Value, It.IsAny<string>(), It.IsAny<string>(), default))
+            .ReturnsAsync(A<MovieResponse>());
+
+        var response = await client.PostAsJsonAsync($"/movie/rating", ratedMovieDto);
+        
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+    }
 }

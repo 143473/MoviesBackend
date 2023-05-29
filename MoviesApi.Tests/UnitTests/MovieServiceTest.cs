@@ -3,6 +3,7 @@ using Moq;
 using MoviesApi.Data.Repositories.Interfaces;
 using MoviesApi.Services;
 using AutoFixture;
+using MoviesApi.Data.Models;
 using tmdb_api;
 
 namespace MoviesApi.Tests.UnitTests;
@@ -55,4 +56,20 @@ public class MovieServiceTest : TestFixture
 
         Assert.That(mrDto.IsFavorite, Is.True);
     }
+    
+    [Test]
+    public async Task GetMovieRatingOfTheRequiredMovie()
+    {
+     var movieId = A<int>();
+     var rating = A<Rating>();
+     rating.MovieId = movieId;
+     _repositoryMock.Setup(r => r.GetMovieRatingAsync(movieId))
+      .ReturnsAsync(rating);
+     
+     var response = await Sut.GetMovieRatingAsync(movieId);
+
+     Assert.That(response.MovieId, Is.EqualTo(movieId));
+    }
+
+
 }

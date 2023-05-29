@@ -3,7 +3,7 @@ using tmdb_api;
 
 namespace MoviesApi.Services.Helpers;
 
-public static class RatingsHelper
+public static class RatingsCalculator
 {
     public static Rating CalculateExistingMovieRating(this Rating rating, RatedMovie ratedMovie)
     {
@@ -34,13 +34,17 @@ public static class RatingsHelper
         return rating;
     }
     
-
     public static Rating CalculateUpdatedMovieRating(this RatedMovie oldRating, RatedMovie newRating, Rating? rating)
     {
         var oldVotes = (int) (rating!.Votes - 1);
-        var oldRatingValue = ((rating.RatingValue * rating.Votes) - oldRating.Rating) / oldVotes;
-        var newVotes = (int) (rating.Votes + 1);
-        var newRatingValue = ((oldRatingValue * rating.Votes) + newRating.Rating) / newVotes;
+        var newRatingValue = newRating.Rating;
+        
+        if (oldVotes != 0)
+        {
+            var oldRatingValue = ((rating.RatingValue * rating.Votes) - oldRating.Rating) / oldVotes;
+            newRatingValue = ((oldRatingValue * oldVotes) + newRating.Rating) / rating.Votes;
+        }
+
         rating = new Rating
         {
             MovieId = oldRating.RatedMovieId,
