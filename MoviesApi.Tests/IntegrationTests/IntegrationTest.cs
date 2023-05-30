@@ -36,12 +36,10 @@ public class IntegrationTest : TestFixture
     }
     
     [Test]
-    public async Task AddMovieRating()
+    public async Task AddMovieRatingSucceeds()
     {
         var ratedMovieDto = A<RatedMovieDto>();
-
         var client = _factory.CreateClient();
-        
         _factory.MoviesClientMock
             .Setup(client => client.GetMovieAsync(ratedMovieDto.RatedMovieId.Value, It.IsAny<string>(), It.IsAny<string>(), default))
             .ReturnsAsync(A<MovieResponse>());
@@ -49,5 +47,21 @@ public class IntegrationTest : TestFixture
         var response = await client.PostAsJsonAsync($"/movie/rating", ratedMovieDto);
         
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+    }
+    
+    [Test]
+    public async Task AddMovieRatingFails()
+    {
+        var ratedMovieDto = A<RatedMovieDto>();
+        var client = _factory.CreateClient();
+        var ratedMovieInput = A<RatedMovieDto>();
+        ratedMovieInput = null;
+        _factory.MoviesClientMock
+            .Setup(client => client.GetMovieAsync(ratedMovieDto.RatedMovieId.Value, It.IsAny<string>(), It.IsAny<string>(), default))
+            .ReturnsAsync(A<MovieResponse>());
+
+        var response = await client.PostAsJsonAsync($"/movie/rating", ratedMovieInput);
+        
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
     }
 }

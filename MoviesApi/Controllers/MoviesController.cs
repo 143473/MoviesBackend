@@ -80,6 +80,10 @@ public class MoviesController : MoviesControllerBase
     {
         return Task.Run<IActionResult>(async () =>
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             var result = await _movieService.AddRatingAsync(ratedMovie);
             return Created($"ratedMovie/{ratedMovie.RatedMovieId}", result);
         });
